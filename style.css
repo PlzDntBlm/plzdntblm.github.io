@@ -1,0 +1,85 @@
+html {
+    background-color: black;
+    font-family: Consolas, monospace;
+    color: greenyellow;
+    font-size: 2vh;
+}
+
+html::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    filter: brightness(8%); /* Adjust the brightness */
+    z-index: -1;
+    background-image: url("https://background-tiles.com/overview/grey/patterns/large/1045.png");
+}
+p{
+    overflow-wrap: break-word;
+
+    -moz-user-select: text;
+    -khtml-user-select: text;
+    -webkit-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+p.userParagraph:before {
+    content: ">";
+    margin-right: 6px;
+}
+
+.machineParagraph {
+    color: blueviolet;
+}
+.inputContainer{
+    display: flex;
+    flex-direction: row;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+}
+.inputContainer:before {
+    content: ">";
+    margin-right: 6px;
+    animation: blink 1s infinite alternate;
+}
+
+#userInput {
+    font-family: Consolas, monospace;
+    font-size: 2vh;
+    color: greenyellow;
+    background-color: transparent;
+    border: none;
+    width: 100%;
+    resize: none;
+    overflow: hidden;
+    /*caret-width: 10px; /* Set the cursor width to 2px (adjust as needed) */
+}
+
+/* Style the placeholder text */
+#userInput::placeholder {
+    color: blueviolet; /* Placeholder text color */
+    font-family: Consolas; /* Italicize the placeholder text */
+}
+
+/* Style when the input is focused (clicked) */
+#userInput:focus {
+    border: none;
+    outline: none;
+}
+
+#userInput::selection {
+    background-color: blueviolet;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 1; /* Fully visible */
+    }
+    100% {
+        opacity: 0; /* Fully transparent */
+    }
+}
