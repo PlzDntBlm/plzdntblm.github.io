@@ -15,8 +15,10 @@ html::before {
     filter: brightness(8%); /* Adjust the brightness */
     z-index: -1;
     background-image: url("https://background-tiles.com/overview/grey/patterns/large/1045.png");
+    background-repeat: repeat-x;
 }
-p{
+
+p {
     overflow-wrap: break-word;
 
     -moz-user-select: text;
@@ -25,6 +27,7 @@ p{
     -ms-user-select: text;
     user-select: text;
 }
+
 p.userParagraph:before {
     content: ">";
     margin-right: 6px;
@@ -33,7 +36,8 @@ p.userParagraph:before {
 .machineParagraph {
     color: blueviolet;
 }
-.inputContainer{
+
+.inputContainer {
     display: flex;
     flex-direction: row;
     margin-block-start: 1em;
@@ -41,6 +45,7 @@ p.userParagraph:before {
     margin-inline-start: 0px;
     margin-inline-end: 0px;
 }
+
 .inputContainer:before {
     content: ">";
     margin-right: 6px;
