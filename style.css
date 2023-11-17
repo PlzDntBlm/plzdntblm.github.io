@@ -15,7 +15,7 @@ html::before {
     filter: brightness(8%); /* Adjust the brightness */
     z-index: -1;
     background-image: url("https://background-tiles.com/overview/grey/patterns/large/1045.png");
-    background-repeat: repeat-x;
+    background-repeat: repeat;
 }
 
 p {
