@@ -22,7 +22,7 @@ p {
     overflow-wrap: break-word;
 
     -moz-user-select: text;
-    -khtml-user-select: text;
+    -html-user-select: text;
     -webkit-user-select: text;
     -ms-user-select: text;
     user-select: text;
@@ -40,7 +40,7 @@ p.userParagraph:before {
 .inputContainer {
     display: flex;
     flex-direction: row;
-    margin-block-start: 1em;
+    /*margin-block-start: 1em;*/
     margin-block-end: 1em;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
@@ -67,7 +67,7 @@ p.userParagraph:before {
 /* Style the placeholder text */
 #userInput::placeholder {
     color: blueviolet; /* Placeholder text color */
-    font-family: Consolas; /* Italicize the placeholder text */
+    font-family: Consolas, monospace /* Italicize the placeholder text */
 }
 
 /* Style when the input is focused (clicked) */
