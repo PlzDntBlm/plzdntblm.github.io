@@ -68,10 +68,10 @@ export class CoreSystem {
             case "/ls":
             case "/focus":
             case "/show":
-                if (parts.includes("focus") || command.includes("/focus")) {
+                if (parts.includes("focus")) {
                     // Handle "/ls focus", "/show focus", etc.
                     return this.currentFocus ? this.currentFocus.getName() : "No focus set.";
-                } else if (parts.includes("programs")) {
+                } else if (parts.includes("programs") || parts.slice(1).length === 0) {
                     // Handle "/ls programs", "/show programs", etc.
                     if (this.programs.length === 0) {
                         return "No programs available."
@@ -87,7 +87,7 @@ export class CoreSystem {
                     const programToStart = this.programs.find(p => p.getName().toLowerCase() === programName.toLowerCase());
                     if (programToStart) {
                         this.startProgram(programToStart);
-                        return `Started ${programName}. </br> Quit program with "/quit".`;
+                        return `Started ${programToStart.getName()}. </br> Quit program with "/quit".`;
                     } else {
                         return `Program ${programName} not found.`;
                     }
