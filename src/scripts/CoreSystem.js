@@ -2,15 +2,23 @@ import {getRandomInsult} from "./getRandomInsult.js";
 
 export class CoreSystem {
     constructor() {
-        this.activeProgram = null;
+        this.activeProgram = this;
         this.currentFocus = this;
         this.programName = "Core System";
         this.programs = [];
         this.commands = {
             "/help": "Display available commands",
             "/clear": "Clear the chat",
-            "/ls focus": "Show program in focus",
-            "/ls programs": "List available programs",
+            "/ls focus": "Show the program currently in focus",
+            "/ls programs": "List all available programs",
+            "/start [program]": "Start a specific program by name",
+            /*"/exit": "Exit the current program",
+            "/status": "Show the current status of the system",
+            "/save": "Save the current state of the program",
+            "/load [state]": "Load a saved state of the program",
+            "/settings": "View or change system settings",
+            "/about": "Display information about the system",*/
+            "/insult": "Get insulted"
             // Add more commands and descriptions as needed
         };
         // Initialization code...
@@ -36,49 +44,78 @@ export class CoreSystem {
         }
     }
 
-    handleSystemCommand(command) {
-        // Compare the beginning of the command (the first word) in the switch
-        switch (command.split(/[ ,]+/)[0].toLowerCase()) {
+    async handleSystemCommand(fullCommand) {
+        const parts = fullCommand.split(/[ ,]+/);
+        const command = parts[0].toLowerCase();
+
+        switch (command) {
             case "/help":
                 let helpMessage = "Here are some available commands:<br>";
                 for (const cmd in this.commands) {
-                    helpMessage += `${cmd}: ${this.commands[cmd]}\<br>`;
+                    helpMessage += `${cmd}: ${this.commands[cmd]}<br>`;
                 }
                 return helpMessage.trim();
+
             case "/clear":
-            case "/clear chat":
-            case "/cs":
-            case "/clear screen":
-                this.ChatUI.clearChat();
-                return null;
-            case "/ls focus":
-            case "/show focus":
-            case "/current app":
-            case "/status":
-            case "/which app":
-            case "/active":
-                return this.currentFocus.getName();
-            case "/ls":
-            case "/ls programs":
-            case "/show programs":
-            case "/programs":
-                if (this.programs.length === 0) {
-                    return "No programs available."
-                } else {
-                    return this.programs.map(program => program.getName()).join('<br>');
+                // Handle "/clear", "/clear chat", "/cs", "/clear screen"
+                if (parts.length === 1 || parts.includes("chat") || parts.includes("cs") || parts.includes("screen")) {
+                    this.ChatUI.clearChat();
+                    return null;
                 }
-            case '/start':
-                return "Tried to start something beautiful."
+                break;
+            case "/insult":
+                return await getRandomInsult();
+            case "/ls":
+            case "/focus":
+            case "/show":
+                if (parts.includes("focus") || command.includes("/focus")) {
+                    // Handle "/ls focus", "/show focus", etc.
+                    return this.currentFocus ? this.currentFocus.getName() : "No focus set.";
+                } else if (parts.includes("programs")) {
+                    // Handle "/ls programs", "/show programs", etc.
+                    if (this.programs.length === 0) {
+                        return "No programs available."
+                    } else {
+                        return this.programs.map(program => program.getName()).join('<br>');
+                    }
+                }
+                break;
+            case "/start":
+            case "/s":
+                if (parts.length > 1) {
+                    const programName = parts.slice(1).join(" "); // Get the rest of the command as the program name
+                    const programToStart = this.programs.find(p => p.getName().toLowerCase() === programName.toLowerCase());
+                    if (programToStart) {
+                        this.startProgram(programToStart);
+                        return `Started ${programName}. </br> Quit program with "/quit".`;
+                    } else {
+                        return `Program ${programName} not found.`;
+                    }
+                } else {
+                    return `Please specify a program to start. </br> Check available programs with "/ls programs".`;
+                }
+            case "/quit":
+            case "/q":
+                return this.endProgram();
             default:
-                // Handle the full command in the default case, if needed
                 return `Command not recognized. Type /help for available commands.`;
         }
     }
 
-
-    loadProgram(program) {
+    startProgram(program) {
         this.activeProgram = program;
+        this.currentFocus = program;
         // Code to load and initialize program
+    }
+    endProgram(){
+        if(this.activeProgram === this){
+            return `No program running to be ended.`;
+        }else {
+            let msg = `Ended "${this.activeProgram}". </br>Switched back to ${this.getName()}.`;
+            this.activeProgram = this;
+            this.currentFocus = this;
+            return msg;
+        }
     }
 
     addProgram(programs) {
