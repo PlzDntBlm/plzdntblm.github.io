@@ -1,6 +1,7 @@
 import {CoreSystem} from "./src/scripts/CoreSystem.js";
 import {ChatUI} from "./src/scripts/ChatUI.js";
 import {Program} from './src/scripts/Program.js';
+import {TextAdventureGame} from './src/scripts/TextAdventureGame.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const userInput = document.getElementById('userInput');
@@ -8,11 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const coreSystem = new CoreSystem();
 
-    const textAdventureGame = new Program("Text Adventure Game");
-
     const chatUI = new ChatUI(userInput, outputDiv, coreSystem);
 
-    textAdventureGame.setUI(chatUI);
+    const myTextAdventureGame = new TextAdventureGame("Spirit Conductor");
+
+    myTextAdventureGame.setUI(chatUI);
     coreSystem.setUI(chatUI);
-    coreSystem.addProgram([textAdventureGame, new Program("Dummy Program 1"), new Program("Dummy Program 2")]);
+    coreSystem.addProgram([myTextAdventureGame, new Program("Dummy Program 1"), new Program("Dummy Program 2")]);
 });

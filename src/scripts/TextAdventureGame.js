@@ -1,12 +1,23 @@
+import {Program} from "./Program.js";
+
 export class TextAdventureGame {
-    constructor(ui) {
-        this.ui = ui;
-        // Game initialization...
+    constructor(name) {
+        this.program = new Program(name);
+        // Other game-specific initializations
     }
 
-    processGameCommand(command) {
-        // Handle game-specific commands
+    processCommand(command) {
+        // Game-specific command logic
+        // You can also delegate to the program instance
+        return this.program.processCommand(command);
     }
 
-    // Other game-specific methods...
+    getName() {
+        return this.program.getName();
+    }
+    setUI(chatUI){
+        this.program.setUI(chatUI);
+    }
+
+    // Other game-specific methods
 }

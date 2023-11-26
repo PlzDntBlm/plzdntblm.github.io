@@ -1,21 +1,19 @@
 export class Program {
     constructor(name) {
-        this.programName = name;
-        // Game initialization...
+        this.name = name;
+        // Other common properties
     }
 
-    async processCommand(command) {
-        // Handle game-specific commands
-        return (`Program Command Processed in: ${this.programName}`);
-    }
-
-    setUI(coreSystem) {
-        this.coreSystem = coreSystem;
+    processCommand(command) {
+        // Common command processing logic
     }
 
     getName() {
-        return this.programName;
+        return this.name;
     }
 
-    // Other game-specific methods...
+    // Other common methods
+    setUI(chatUI) {
+        this.ui = chatUI;
+    }
 }

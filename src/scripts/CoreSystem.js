@@ -37,8 +37,8 @@ export class CoreSystem {
     }
 
     handleSystemCommand(command) {
-        // Handle custom commands with a slash prefix ("/")
-        switch (command) {
+        // Compare the beginning of the command (the first word) in the switch
+        switch (command.split(/[ ,]+/)[0].toLowerCase()) {
             case "/help":
                 let helpMessage = "Here are some available commands:<br>";
                 for (const cmd in this.commands) {
@@ -58,6 +58,7 @@ export class CoreSystem {
             case "/which app":
             case "/active":
                 return this.currentFocus.getName();
+            case "/ls":
             case "/ls programs":
             case "/show programs":
             case "/programs":
@@ -66,12 +67,14 @@ export class CoreSystem {
                 } else {
                     return this.programs.map(program => program.getName()).join('<br>');
                 }
-            case command.toLowerCase().split(/[ ,]+/)[0].startsWith('/start'):
+            case '/start':
                 return "Tried to start something beautiful."
             default:
-                return "Command not recognized. Type /help for available commands.";
+                // Handle the full command in the default case, if needed
+                return `Command not recognized. Type /help for available commands.`;
         }
     }
+
 
     loadProgram(program) {
         this.activeProgram = program;

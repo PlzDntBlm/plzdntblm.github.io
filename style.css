@@ -21,6 +21,11 @@ html::before {
 p {
     overflow-wrap: break-word;
 
+    margin-block-start: 1em;
+    margin-block-end: 0em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+
     -moz-user-select: text;
     -html-user-select: text;
     -webkit-user-select: text;
@@ -40,8 +45,8 @@ p.userParagraph:before {
 .inputContainer {
     display: flex;
     flex-direction: row;
-    /*margin-block-start: 1em;*/
-    margin-block-end: 1em;
+    margin-block-start: 1em;
+    /*margin-block-end: 1em;*/
     margin-inline-start: 0px;
     margin-inline-end: 0px;
 }
