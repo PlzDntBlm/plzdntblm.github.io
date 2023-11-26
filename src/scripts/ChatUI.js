@@ -12,6 +12,7 @@ export class ChatUI {
         this.outputDiv = outputDiv;
         this.coreSystem = coreSystem;
         this.initializeEventListeners();
+        this.appendParagraphToOutput("INFORMATION! There is no game as of now. I only crated an environment where one can start/quit programs and use certain commands. I intend to expand this web-app and iterate and integrate every new learnt feature from upcoming lectures.", "machineParagraph");
     }
 
     initializeEventListeners() {
