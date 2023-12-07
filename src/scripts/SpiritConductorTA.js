@@ -1,6 +1,6 @@
 import {Program} from "./Program.js";
 
-export class TextAdventureGame {
+export class SpiritConductorTA {
     constructor(name) {
         this.program = new Program(name);
         // Other game-specific initializations
