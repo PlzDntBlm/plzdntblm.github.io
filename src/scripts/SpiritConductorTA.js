@@ -1,8 +1,8 @@
 import {Program} from "./Program.js";
 
 export class SpiritConductorTA {
-    constructor(name) {
-        this.program = new Program(name);
+    constructor() {
+        this.program = new Program("Spirit Conductor TA");
         // Other game-specific initializations
     }
 

@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const chatUI = new ChatUI(userInput, outputDiv, coreSystem);
 
-    const spiritConductorTAGame = new SpiritConductorTA("Spirit Conductor");
+    const spiritConductorTAGame = new SpiritConductorTA();
 
     spiritConductorTAGame.setUI(chatUI);
     coreSystem.setUI(chatUI);
