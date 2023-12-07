@@ -57,6 +57,31 @@ p.userParagraph:before {
     animation: blink 1s infinite alternate;
 }
 
+.imageParagraph{
+    display: flex;
+    justify-content: center;
+
+    margin-block-start: 1em;
+    margin-block-end: 0em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    -moz-user-select: none;
+    -html-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.imageParagraphImage{
+    max-width: 100%;
+    min-width: 100%;
+}
+@media screen and (min-width: 600px) {
+    .imageParagraphImage{
+        max-width: 100%;
+        min-width: 500px;
+    }
+}
+
 #userInput {
     font-family: Consolas, monospace;
     font-size: 2vh;

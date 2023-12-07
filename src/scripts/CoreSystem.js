@@ -26,6 +26,9 @@ export class CoreSystem {
 
     async processCommand(command) {
         // Handle system-level commands
+        if (command ==="img"){
+            this.ChatUI.appendImageToOutput('https://upload.wikimedia.org/wikipedia/en/2/27/Bliss_%28Windows_XP%29.png')
+        }
         return this.handleSystemCommand(command);
     }
 

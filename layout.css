@@ -45,7 +45,7 @@ main::-webkit-scrollbar-corner{
     flex-direction: column;
 }
 
-.panel img {
+aside img {
     max-width: 80%;
 }
 

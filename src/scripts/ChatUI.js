@@ -70,6 +70,17 @@ export class ChatUI {
         paragraph.className = className;
         this.outputDiv.appendChild(paragraph);
     }
+    appendImageToOutput(imageUrl){
+        const imageParagraph = document.createElement('div');
+        imageParagraph.className = 'imageParagraph'; // Assign a class for styling
+
+        const image = new Image();
+        image.src = imageUrl;
+        image.alt = "Loaded image";
+        image.className = "imageParagraphImage"; // for styling purposes
+        imageParagraph.appendChild(image);
+        this.outputDiv.appendChild(imageParagraph);
+    }
 
     isSystemCommand(input) {
         // Implement logic to determine if the command is a system-level command
