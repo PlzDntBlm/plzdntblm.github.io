@@ -12,7 +12,7 @@ export class ChatUI {
         this.outputDiv = outputDiv;
         this.coreSystem = coreSystem;
         this.initializeEventListeners();
-        this.appendParagraphToOutput("INFORMATION! There is not much functionality as of now. I intend to expand this web-app and iterate and integrate every new learnt feature from upcoming lectures.", "machineParagraph");
+        this.appendParagraphToOutput("INFORMATION! There is not much functionality as of now. I intend to expand this web-app and iterate and integrate every new learnt feature from upcoming lectures.", "machineParagraph",this.coreSystem.getName());
     }
 
     initializeEventListeners() {
@@ -73,13 +73,14 @@ export class ChatUI {
         this.userInput.value = "";
     }
 
-    appendParagraphToOutput(text, className) {
+    appendParagraphToOutput(text, className, attribute) {
         const paragraph = document.createElement('p');
         paragraph.innerHTML = text;
         paragraph.className = className;
+        paragraph.setAttribute("data-program-name", `${attribute ? attribute : this.coreSystem.currentFocus.getName()}>`);
         this.outputDiv.appendChild(paragraph);
     }
-    appendImageToOutput(imageUrl){
+    appendImageToOutput(imageUrl, attribute){
         const imageParagraph = document.createElement('div');
         imageParagraph.className = 'imageParagraph'; // Assign a class for styling
 
