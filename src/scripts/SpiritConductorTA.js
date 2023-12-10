@@ -19,5 +19,9 @@ export class SpiritConductorTA {
         this.program.setUI(chatUI);
     }
 
+    Start(){
+        this.program.ui.appendParagraphToOutput(`Welcome to Spirit Conductor TA!</br> Every Ticket a Journey.</br></br> This game isn't feature complete.`);
+    }
+
     // Other game-specific methods
 }
