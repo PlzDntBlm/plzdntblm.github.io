@@ -16,4 +16,7 @@ export class Program {
     setUI(chatUI) {
         this.ui = chatUI;
     }
+    Start(){
+
+    }
 }

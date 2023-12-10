@@ -50,7 +50,16 @@ export class ChatUI {
         this.appendParagraphToOutput(inputValue, "userParagraph");
 
         let response;
-        if (this.coreSystem.currentFocus) {
+
+        // Check if the command starts with "/"
+        if (inputValue.startsWith("/")) {
+            response = await this.coreSystem.handleSystemCommand(inputValue);
+        }
+        // Delegate to the active program if it's not a system command
+        else if (this.coreSystem.activeProgram === this.coreSystem) {
+            response = await this.coreSystem.processCommand(inputValue);
+        }
+        else if (this.coreSystem.currentFocus) {
             response = await this.coreSystem.currentFocus.processCommand(inputValue);
         } else {
             response = "NOTHING IN FOCUS - FOCUS RESET TO CORE SYSTEM";

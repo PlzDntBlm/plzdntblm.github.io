@@ -1,8 +1,8 @@
 import {Program} from "./Program.js";
 
 export class SpiritConductorTA {
-    constructor(name) {
-        this.program = new Program(name);
+    constructor() {
+        this.program = new Program("Spirit Conductor TA");
         // Other game-specific initializations
     }
 
@@ -17,6 +17,10 @@ export class SpiritConductorTA {
     }
     setUI(chatUI){
         this.program.setUI(chatUI);
+    }
+
+    Start(){
+        this.program.ui.appendParagraphToOutput(`Welcome to Spirit Conductor TA!</br> Every Ticket a Journey.</br></br> This game isn't feature complete.`);
     }
 
     // Other game-specific methods
