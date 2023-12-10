@@ -28,6 +28,7 @@ export class ChatUI {
             }
         });
 
+        // Prevents text selections and sets focus on input
         this.userInput.addEventListener("blur", () => {
             if (true) {  // Replace with your actual condition
                 this.userInput.focus();
