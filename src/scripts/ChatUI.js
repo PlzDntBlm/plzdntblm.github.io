@@ -7,10 +7,11 @@ export class ChatUI {
     // Displaying responses and program state updates.
     // Managing UI elements like the chat history, input field, etc.
     // Handling UI-specific commands (like /clear).
-    constructor(userInput, outputDiv, coreSystem) {
+    constructor({userInput, outputDiv, coreSystem, avatarImg}) {
         this.userInput = userInput;
         this.outputDiv = outputDiv;
         this.coreSystem = coreSystem;
+        this.avatarImg = avatarImg;
         this.initializeEventListeners();
         this.appendParagraphToOutput("INFORMATION! There is not much functionality as of now. I intend to expand this web-app and iterate and integrate every new learnt feature from upcoming lectures.", "machineParagraph",this.coreSystem.getName());
     }
@@ -91,12 +92,10 @@ export class ChatUI {
         imageParagraph.appendChild(image);
         this.outputDiv.appendChild(imageParagraph);
     }
-
-    isSystemCommand(input) {
-        // Implement logic to determine if the command is a system-level command
-        return input.startsWith("/");
+    setAvatarImage(imageUrl,alt){
+        this.avatarImg.src = imageUrl;
+        this.avatarImg.alt = alt;
     }
-
     clearChat() {
         this.outputDiv.innerHTML = '';
     }
