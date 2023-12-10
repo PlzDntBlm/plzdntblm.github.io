@@ -105,13 +105,14 @@ export class CoreSystem {
     startProgram(program) {
         this.activeProgram = program;
         this.currentFocus = program;
+        program.Start();
         // Code to load and initialize program
     }
     endProgram(){
         if(this.activeProgram === this){
             return `No program running to be ended.`;
         }else {
-            let msg = `Ended "${this.activeProgram}". </br>Switched back to ${this.getName()}.`;
+            let msg = `Ended "${this.activeProgram.getName()}". </br>Switched back to ${this.getName()}.`;
             this.activeProgram = this;
             this.currentFocus = this;
             return msg;
