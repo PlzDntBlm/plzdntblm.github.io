@@ -25,12 +25,15 @@ export class RockPaperScissors {
         let result;
         if (userChoice === 'rock' || userChoice === 'paper' || userChoice === 'scissors') {
             if (userChoice === computerChoice) {
+                this.program.ui.setAvatarImage('https://wojakparadise.net/wojak/3971/img', "Smooth And Easy Wojak");
                 result = 'It\'s a tie!';
             } else if ((userChoice === 'rock' && computerChoice === 'scissors') ||
                 (userChoice === 'scissors' && computerChoice === 'paper') ||
                 (userChoice === 'paper' && computerChoice === 'rock')) {
+                    this.program.ui.setAvatarImage('https://wojakparadise.net/wojak/6454/img', "Crying Bloomer Wojak");
                 result = 'You win!';
             } else {
+                    this.program.ui.setAvatarImage('https://wojakparadise.net/wojak/3968/img', "Happy Wojak");
                 result = 'You lose!';
             }
         } else {

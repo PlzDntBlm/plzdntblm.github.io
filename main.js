@@ -7,10 +7,11 @@ import {RockPaperScissors} from "./src/scripts/RockPaperScissors.js";
 document.addEventListener('DOMContentLoaded', () => {
     const userInput = document.getElementById('userInput');
     const outputDiv = document.getElementById('output');
+    const avatarImg = document.getElementById('avatarImg');
 
     const coreSystem = new CoreSystem();
 
-    const chatUI = new ChatUI(userInput, outputDiv, coreSystem);
+    const chatUI = new ChatUI({userInput:userInput, outputDiv:outputDiv, coreSystem:coreSystem,avatarImg:avatarImg});
 
     const spiritConductorTAGame = new SpiritConductorTA();
     spiritConductorTAGame.setUI(chatUI);
