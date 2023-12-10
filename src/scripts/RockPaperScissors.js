@@ -47,7 +47,7 @@ export class RockPaperScissors {
         this.program.setUI(chatUI);
     }
     Start(){
-        this.program.ui.appendParagraphToOutput(`Welcome to Rock Paper Scissors!</br> Let's play one round. Enter "rock" (r), "paper" (p) or "scissors" (s).`);
+        this.program.ui.appendParagraphToOutput(`Welcome to Rock Paper Scissors!</br> Let's play one round. Enter "rock" (r), "paper" (p) or "scissors" (s).`,'machineParagraph');
     }
 
     // Other game-specific methods

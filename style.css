@@ -41,6 +41,10 @@ p.userParagraph:before {
 .machineParagraph {
     color: blueviolet;
 }
+.machineParagraph:before {
+    content: attr(data-program-name);
+    margin-right: 6px;
+}
 
 .inputContainer {
     display: flex;
