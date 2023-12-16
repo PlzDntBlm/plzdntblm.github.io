@@ -17,6 +17,6 @@ export class Program {
         this.ui = chatUI;
     }
     Start(){
-
+        this.ui.appendParagraphToOutput(`Program started: ${this.name}`,'machineParagraph')
     }
 }
