@@ -7,6 +7,7 @@ export class ChatUI {
     // Displaying responses and program state updates.
     // Managing UI elements like the chat history, input field, etc.
     // Handling UI-specific commands (like /clear).
+    focusInput = true;
     constructor({userInput, outputDiv, coreSystem, avatarImg}) {
         this.userInput = userInput;
         this.outputDiv = outputDiv;
@@ -28,11 +29,11 @@ export class ChatUI {
             }
         });
 
-        this.userInput.addEventListener("blur", () => {
-            if (true) {  // Replace with your actual condition
+        /*if(this.focusInput) {
+            this.userInput.addEventListener("blur", () => {
                 this.userInput.focus();
-            }
-        });
+            });
+        }*/
 
         this.userInput.addEventListener('input', (event) => {
             this.adjustTextareaHeight();
