@@ -1,17 +1,17 @@
 class GameObject {
-    constructor() {
+    constructor(data) {
         this.transform = {
             position: {
-                x:0,
-                y:0
+                x: data.position.x ? data.position.x : 0,
+                y:data.position.y ? data.position.y : 0
             },
             scale:{
-                x:1,
-                y:1
+                x:data.scale.x ? data.scale.x : 1,
+                y:data.scale.y ? data.scale.y : 1
             },
             sizeInPixel:{
-                x:16,
-                y:16
+                x:data.sizeInPixel.x ? data.sizeInPixel.x : 16,
+                y:data.sizeInPixel.y ? data.sizeInPixel.y : 16
             }
         }
     }
