@@ -1,16 +1,7 @@
-import GameObject from "./GameObject.js";
+import {GameObject} from "./GameObject.js";
 export class Player extends GameObject{
     constructor() {
         super();
-        this.texture = null;
-    }
-    Update(){
-
-    }
-    FixedUpdate(){
-
-    }
-    Render(){
-
+        this.renderer.imageSrc = './../assets/images/Player.png';
     }
 }

@@ -26,10 +26,12 @@ export class GameLoop {
 
     Update(deltaTime) {
         // Update game entities and logic based on variable deltaTime
+        this.px2d.game.gameObjectManager.UpdateGameObjects(deltaTime);
     }
 
     FixedUpdate(fixedDeltaTime) {
         // Consistent update logic, independent of frame rate
+        this.px2d.game.gameObjectManager.FixedUpdateGameObjects(fixedDeltaTime);
     }
 
     Render() {
@@ -38,6 +40,8 @@ export class GameLoop {
         this.frameCounter++;
         if(this.px2d.context){
             this.px2d.context.clearRect(0, 0, this.px2d.overlay.firstChild.width, this.px2d.overlay.firstChild.height);
+
+            this.px2d.game.gameObjectManager.RenderGameObjects();
         }
         // Drawing logic...
     }
