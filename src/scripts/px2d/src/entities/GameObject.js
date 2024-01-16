@@ -15,4 +15,13 @@ class GameObject {
             }
         }
     }
+    Update(){
+
+    }
+    FixedUpdate(){
+
+    }
+    Render(){
+
+    }
 }

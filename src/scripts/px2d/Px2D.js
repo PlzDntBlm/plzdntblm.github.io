@@ -1,12 +1,12 @@
 import {Program} from "../Program.js";
-import {GameLoop} from "./src/core/GameLoop.js";
 import {startResizing} from "./styles/ResizeCanvas.js";
+import {Game} from "./Game.js";
 
 class Px2D {
     constructor() {
         this.program = new Program("Px 2D");
-        this.canvas = undefined;
-        this.gameLoop = undefined;
+        this.game = null;
+        this.context = null;
     }
 
     processCommand(command) {
@@ -21,11 +21,12 @@ class Px2D {
         this.program.setUI(chatUI);
     }
 
-    Start() {
+    async Start() {
         this.program.ui.appendParagraphToOutput(`Welcome to Px 2D!<br>Opened new Window.`, 'machineParagraph');
         // Call the function to add the overlay to the document
         this.setup().then(() => {
-            this.startGameLoop();
+            this.game = new Game(this);
+            this.game.Init();
         });
     }
 
@@ -37,40 +38,25 @@ class Px2D {
         this.overlay.id = "px2d-overlay";
 
         // Create canvas element
-        this.canvas = document.createElement("canvas");
-        this.canvas.id = "px2d-canvas";
-        this.canvas.width = 400; // Set canvas width as needed
-        this.canvas.height = 300; // Set canvas height as needed
-
+        let canvas = document.createElement("canvas");
+        canvas.id = "px2d-canvas";
+        canvas.width = 256; // Set canvas width as needed
+        canvas.height = 240; // Set canvas height as needed
         // Append canvas to the overlay
-        this.overlay.appendChild(this.canvas);
+        this.overlay.appendChild(canvas);
+
 
         // Append overlay to the body
-        document.body.appendChild(this.overlay);
+        //document.body.appendChild(this.overlay);
+        const canvasDiv = document.querySelector("#canvas");
+        canvasDiv.append(this.overlay);
+        this.context = document.querySelector("#px2d-canvas").getContext("2d");
+
         startResizing();
     }
 
     async setup() {
-        this.addOverlay();
-        // Load assets
-        //await loadAssets();
-
-        // Initialize game entities
-        //const player = new Player();
-        //const enemies = createEnemies();
-
-        // Setup input handlers
-        //setupInputHandling();
-
-        // Initialize other necessary game components
-        // ...
-
-        // Start the game loop
-    }
-
-    startGameLoop() {
-        // Instantiate and start the game loop
-        this.gameLoop = new GameLoop(this);
+        await this.addOverlay();
     }
 }
 

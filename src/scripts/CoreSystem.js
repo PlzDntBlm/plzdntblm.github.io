@@ -86,7 +86,7 @@ export class CoreSystem {
                     const programName = parts.slice(1).join(" "); // Get the rest of the command as the program name
                     const programToStart = this.programs.find(p => p.getName().toLowerCase() === programName.toLowerCase());
                     if (programToStart) {
-                        this.startProgram(programToStart);
+                        await this.startProgram(programToStart);
                         return `Started ${programToStart.getName()}. </br> Quit program with "/quit".`;
                     } else {
                         return `Program ${programName} not found.`;
@@ -102,10 +102,10 @@ export class CoreSystem {
         }
     }
 
-    startProgram(program) {
+    async startProgram(program) {
         this.activeProgram = program;
         this.currentFocus = program;
-        program.Start();
+        await program.Start();
         // Code to load and initialize program
     }
     endProgram(){
