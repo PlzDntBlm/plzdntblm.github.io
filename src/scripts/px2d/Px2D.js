@@ -1,28 +1,34 @@
 import {Program} from "../Program.js";
 import {GameLoop} from "./src/core/GameLoop.js";
+import {startResizing} from "./styles/ResizeCanvas.js";
 
-class Px2D{
+class Px2D {
     constructor() {
         this.program = new Program("Px 2D");
         this.canvas = undefined;
         this.gameLoop = undefined;
     }
+
     processCommand(command) {
         let userChoice = command.toLowerCase();
     }
+
     getName() {
         return this.program.getName();
     }
-    setUI(chatUI){
+
+    setUI(chatUI) {
         this.program.setUI(chatUI);
     }
-    Start(){
-        this.program.ui.appendParagraphToOutput(`Welcome to Px 2D!<br>Opened new Window.`,'machineParagraph');
+
+    Start() {
+        this.program.ui.appendParagraphToOutput(`Welcome to Px 2D!<br>Opened new Window.`, 'machineParagraph');
         // Call the function to add the overlay to the document
         this.setup().then(() => {
             this.startGameLoop();
         });
     }
+
     addOverlay() {
         this.program.ui.focusInput = false;
         this.program.ui.userInput.blur();
@@ -41,6 +47,7 @@ class Px2D{
 
         // Append overlay to the body
         document.body.appendChild(this.overlay);
+        startResizing();
     }
 
     async setup() {
@@ -60,9 +67,11 @@ class Px2D{
 
         // Start the game loop
     }
+
     startGameLoop() {
         // Instantiate and start the game loop
         this.gameLoop = new GameLoop(this);
     }
 }
+
 export {Px2D}

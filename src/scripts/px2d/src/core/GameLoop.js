@@ -1,27 +1,41 @@
-export class GameLoop{
+export class GameLoop {
     constructor(px2d) {
         this.px2d = px2d;
         this.canvasContext = px2d.canvas.getContext("2d");
         this.lastRenderTime = 0;
+        this.accumulatedTime = 0;
+        this.fixedTimeStep = 1000 / 60; // 60 updates per second
+
         requestAnimationFrame((timestamp) => this.GameLoop(timestamp));
     }
-     GameLoop(timestamp) {
+
+    GameLoop(timestamp) {
         let deltaTime = timestamp - this.lastRenderTime;
         this.lastRenderTime = timestamp;
+        this.accumulatedTime += deltaTime;
+
+        while (this.accumulatedTime >= this.fixedTimeStep) {
+            this.FixedUpdate(this.fixedTimeStep);
+            this.accumulatedTime -= this.fixedTimeStep;
+        }
 
         this.Update(deltaTime);
         this.Render();
 
-         requestAnimationFrame((timestamp) => this.GameLoop(timestamp));
+        requestAnimationFrame((timestamp) => this.GameLoop(timestamp));
     }
 
     Update(deltaTime) {
-        // Update game entities and logic
+        // Update game entities and logic based on variable deltaTime
     }
-     Render() {
-        // Clear canvas
-        this.canvasContext.clearRect(0, 0, this.canvasContext.width, this.canvasContext.height);
 
-        // Draw game entities
+    FixedUpdate(fixedDeltaTime) {
+        // Consistent update logic, independent of frame rate
+    }
+
+    Render() {
+        // Clear canvas and draw game entities
+        this.canvasContext.clearRect(0, 0, this.px2d.canvas.width, this.px2d.canvas.height);
+        // Drawing logic...
     }
 }
