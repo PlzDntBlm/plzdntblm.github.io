@@ -25,4 +25,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     coreSystem.setUI(chatUI);
     coreSystem.addProgram([spiritConductorTAGame, rockPaperScissors, px2d, new Program("Dummy Program 1"), new Program("Dummy Program 2")]);
+    coreSystem.startProgram(px2d);
 });

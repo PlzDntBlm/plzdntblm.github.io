@@ -1,7 +1,7 @@
 import {GameLoop} from "./src/core/GameLoop.js";
-import {GameObjectManager}
-    from "./src/entities/GameObjectManager.js";
+import {GameObjectManager} from "./src/entities/GameObjectManager.js";
 import {Player} from "./src/entities/Player.js";
+import {Tile} from "./src/entities/Tile.js";
 
 class Game {
     constructor(px2d) {
@@ -12,20 +12,28 @@ class Game {
 
     Init(){
         this.StartGameLoop();
-
     }
     StartGameLoop() {
         // Load assets
         //await loadAssets();
 
         // Initialize game entities
+
+        // Initialize player
         this.player = new Player();
         this.player.px2d = this.px2d;
         this.player.transform.position.x = 32;
         this.player.transform.position.y = 32;
-        this.player.transform.sizeInPixel.x = 16;
-        this.player.transform.sizeInPixel.y = 16;
-        this.gameObjectManager.addGameObject(this.player)
+        this.gameObjectManager.addGameObject(this.player);
+
+        // Initialize tiles
+        let tile = new Tile();
+        tile.px2d = this.px2d;
+        tile.setTileType(0);
+        tile.transform.position.x = 128;
+        tile.transform.position.y = 128;
+        this.gameObjectManager.addGameObject(tile);
+
 
         //const enemies = createEnemies();
 

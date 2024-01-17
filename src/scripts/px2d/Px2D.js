@@ -7,6 +7,7 @@ class Px2D {
         this.program = new Program("Px 2D");
         this.game = null;
         this.context = null;
+        this.assetsPath = "./src/scripts/px2d/src/assets/";
     }
 
     processCommand(command) {
