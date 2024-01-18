@@ -3,21 +3,27 @@ import {GameObjectManager} from "./src/entities/GameObjectManager.js";
 import {Player} from "./src/entities/Player.js";
 import {Tile} from "./src/entities/Tile.js";
 import {Scene} from "./src/scenes/Scene.js";
+import {Tileset} from "./src/scenes/Tilemaps/Tileset.js";
 
 class Game {
     constructor(px2d) {
         this.px2d = px2d;
         this.gameLoop = new GameLoop(px2d);
         this.gameObjectManager = new GameObjectManager();
+        this.tileSet = {};
     }
 
-    Init() {
-        this.StartGameLoop();
+    async Init() {
+        await this.StartGameLoop();
     }
 
-    StartGameLoop() {
+    async StartGameLoop() {
         // Load assets
         //await loadAssets();
+        this.tileSet = await new Tileset(this.px2d);
+
+        let scene = new Scene(this.px2d);
+
 
         // Initialize game entities
 
@@ -29,14 +35,6 @@ class Game {
         this.gameObjectManager.addGameObject(this.player);
 
         // Initialize tiles
-        let tile = new Tile();
-        tile.px2d = this.px2d;
-        tile.setTileType(0);
-        tile.tile.position.col = 3;
-        tile.tile.position.row = 2;
-
-        let scene = new Scene();
-        Scene.SetTileInTileMap(scene.tileMap, tile);
 
         this.gameObjectManager.addGameObjects(scene.tileMap);
 

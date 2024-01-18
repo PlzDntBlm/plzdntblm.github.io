@@ -1,4 +1,5 @@
 import {GameObject} from "./GameObject.js";
+import {Tileset} from "../scenes/Tilemaps/Tileset.js";
 
 export class Tile extends GameObject {
     constructor(data = {}) {
@@ -13,17 +14,12 @@ export class Tile extends GameObject {
         data.tile.position.col = data.tile.position.col || 0;
 
         this.tile = data.tile;
-        this.setTileType(data.tile.type);
+        //this.setTileType(data.tile.type);
 
         this.renderer.drawMode = 'texture';
         this.transform.sizeInPixel.x = 16;
         this.transform.sizeInPixel.y = 16;
     }
-
-    static Tiles = [
-        {id: 0, name: 'Missing', source: '/images/Tile_0_Missing.png'},
-        {id: 1, name: 'Brick_Wall', source: '/images/Tile_1_Brick_Wall.png'}
-    ];
 
     static tileCoordinatesToPixelPosition(px2d, data = {}) {
         data = {
@@ -42,8 +38,10 @@ export class Tile extends GameObject {
             return {x: x, y: y};
         }
     }
-    
+
     setTileType(wantedType) {
+        console.log(this.px2d)
+        //console.log(`requested tile of type: ${wantedType}`)
         if (typeof wantedType === 'number') {
             Tile.Tiles.find((element) => {
                 if (element.id === wantedType) {
@@ -68,10 +66,19 @@ export class Tile extends GameObject {
         const img = new Image();
         img.src = this.px2d.assetsPath + this.renderer.imageSrc;
 
+        // find coordinates of source image to draw
+        let sourceTile = Tileset.TileSet.find((el) => {
+            if (Number(el.tileNumber) === Number(this.tile.type)) {
+                return el;
+            }
+        });
+
         const tileCoordinates = Tile.tileCoordinatesToPixelPosition(this.px2d, {
             col: this.tile.position.col,
             row: this.tile.position.row
-        });
-        context.drawImage(img, tileCoordinates.x, tileCoordinates.y, this.transform.sizeInPixel.x, this.transform.sizeInPixel.y);
+        })
+        context.drawImage(Tileset.SpriteSheet, tileCoordinates.x, tileCoordinates.y, this.transform.sizeInPixel.x, this.transform.sizeInPixel.y, sourceTile.);
+        ;
+        //context.drawImage(img, tileCoordinates.x, tileCoordinates.y, this.transform.sizeInPixel.x, this.transform.sizeInPixel.y);
     }
 }

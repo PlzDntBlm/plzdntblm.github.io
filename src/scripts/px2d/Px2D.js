@@ -14,6 +14,8 @@ class Px2D {
         this.assetsPath = "./src/scripts/px2d/src/assets/";
     }
 
+    static Px2DContext = {}
+
     processCommand(command) {
         let userChoice = command.toLowerCase();
     }
@@ -56,7 +58,7 @@ class Px2D {
         const canvasDiv = document.querySelector("#canvas");
         canvasDiv.append(this.overlay);
         this.context = document.querySelector("#px2d-canvas").getContext("2d");
-
+        Px2D.Px2DContext = this.context;
         startResizing();
     }
 
