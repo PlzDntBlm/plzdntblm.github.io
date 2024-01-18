@@ -10,9 +10,10 @@ class Game {
         this.gameObjectManager = new GameObjectManager();
     }
 
-    Init(){
+    Init() {
         this.StartGameLoop();
     }
+
     StartGameLoop() {
         // Load assets
         //await loadAssets();
@@ -22,16 +23,16 @@ class Game {
         // Initialize player
         this.player = new Player();
         this.player.px2d = this.px2d;
-        this.player.transform.position.x = 32;
-        this.player.transform.position.y = 32;
+        this.player.transform.position.x = 16;
+        this.player.transform.position.y = 16;
         this.gameObjectManager.addGameObject(this.player);
 
         // Initialize tiles
         let tile = new Tile();
         tile.px2d = this.px2d;
         tile.setTileType(0);
-        tile.transform.position.x = 128;
-        tile.transform.position.y = 128;
+        tile.tile.position.col = 1;
+        tile.tile.position.row = 2;
         this.gameObjectManager.addGameObject(tile);
 
 
@@ -47,4 +48,5 @@ class Game {
         this.gameLoop = new GameLoop(this);
     }
 }
+
 export {Game}

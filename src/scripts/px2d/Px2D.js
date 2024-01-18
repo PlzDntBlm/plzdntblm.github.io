@@ -7,6 +7,10 @@ class Px2D {
         this.program = new Program("Px 2D");
         this.game = null;
         this.context = null;
+        this.canvas = {
+            width: 256,
+            height: 240
+        }
         this.assetsPath = "./src/scripts/px2d/src/assets/";
     }
 
@@ -41,8 +45,8 @@ class Px2D {
         // Create canvas element
         let canvas = document.createElement("canvas");
         canvas.id = "px2d-canvas";
-        canvas.width = 256; // Set canvas width as needed
-        canvas.height = 240; // Set canvas height as needed
+        canvas.width = this.canvas.width; // Set canvas width as needed
+        canvas.height = this.canvas.height; // Set canvas height as needed
         // Append canvas to the overlay
         this.overlay.appendChild(canvas);
 

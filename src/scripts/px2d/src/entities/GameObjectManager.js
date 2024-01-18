@@ -1,30 +1,37 @@
 import {GameObject} from "./GameObject.js";
+
 export class GameObjectManager {
     constructor() {
         this.gameObjects = [];
     }
-    getGameObjects(){
+
+    getGameObjects() {
         return this.gameObjects;
     }
-    setGameObjects(gameObjects){
+
+    setGameObjects(gameObjects) {
         this.gameObjects = gameObjects;
     }
-    addGameObject(gameObject){
+
+    addGameObject(gameObject) {
         this.gameObjects.push(gameObject);
     }
-    UpdateGameObjects(deltaTime){
+
+    UpdateGameObjects(deltaTime) {
         this.gameObjects.forEach((gameObject) => {
-           gameObject.Update(deltaTime);
+            gameObject.Update(deltaTime);
         });
     }
-    FixedUpdateGameObjects(fixedDeltaTime){
+
+    FixedUpdateGameObjects(fixedDeltaTime) {
         this.gameObjects.forEach((gameObject) => {
             gameObject.FixedUpdate(fixedDeltaTime);
         });
     }
-    RenderGameObjects(){
+
+    RenderGameObjects(px2d) {
         this.gameObjects.forEach((gameObject) => {
-            gameObject.Render();
+            gameObject.Render(px2d);
         });
     }
 }
