@@ -1,5 +1,6 @@
 import {GameObject} from "./GameObject.js";
 import {Tileset} from "../scenes/Tilemaps/Tileset.js";
+import {Px2D} from "../../Px2D.js";
 
 export class Tile extends GameObject {
     constructor(data = {}) {
@@ -61,24 +62,35 @@ export class Tile extends GameObject {
         }
     }
 
-    Render(px2d) {
-        const context = this.px2d.context;
-        const img = new Image();
-        img.src = this.px2d.assetsPath + this.renderer.imageSrc;
-
+    Render() {
+        console.log("----------------------------");
         // find coordinates of source image to draw
-        let sourceTile = Tileset.TileSet.find((el) => {
-            if (Number(el.tileNumber) === Number(this.tile.type)) {
+        let sourceTile = {};
+        sourceTile = Tileset.TileSet.find((el) => {
+            if (el.tileNumber === this.tile.type) {
+                console.log(`Positive tileNumber (${typeof el.tileNumber}) ${el.tileNumber} with Tile type (${typeof this.tile.type}) ${this.tile.type}`);
                 return el;
+            } else {
+                console.log(`Negative tileNumber (${typeof el.tileNumber}) ${el.tileNumber} with Tile type (${typeof this.tile.type}) ${this.tile.type}`);
+                Tileset.TileSet.find((el) => {
+                    if (el.tileNumber === 0) {
+                        return el;
+                    }
+                });
             }
         });
 
+        if (!sourceTile) {
+            console.log("Couldn't assign sourceTile");
+            console.log(this);
+            console.log(Tileset.TileSet)
+            console.log("----------------------------");
+        }
         const tileCoordinates = Tile.tileCoordinatesToPixelPosition(this.px2d, {
             col: this.tile.position.col,
             row: this.tile.position.row
         })
-        context.drawImage(Tileset.SpriteSheet, tileCoordinates.x, tileCoordinates.y, this.transform.sizeInPixel.x, this.transform.sizeInPixel.y, sourceTile.);
-        ;
-        //context.drawImage(img, tileCoordinates.x, tileCoordinates.y, this.transform.sizeInPixel.x, this.transform.sizeInPixel.y);
+
+        Px2D.Px2DContext.drawImage(Tileset.SpriteSheet, tileCoordinates.x, tileCoordinates.y, this.transform.sizeInPixel.x, this.transform.sizeInPixel.y, sourceTile.source.locationOnSpriteSheet.col * 16, sourceTile.source.locationOnSpriteSheet.row * 16 + 16, 16, 16);
     }
 }

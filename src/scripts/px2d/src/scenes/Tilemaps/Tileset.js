@@ -13,7 +13,7 @@ export class Tileset {
                 Tileset.SpriteSheet.src = px2d.assetsPath + "images/Pyxel SpriteSheet.png";
                 tileSetJson.tileset.tile.forEach((el) => {
                     Tileset.TileSet.push({
-                        tileNumber: el['@attributes'].id, type: el['@attributes'].type, source: {
+                        tileNumber: Number(el['@attributes'].id), type: el['@attributes'].type, source: {
                             locationOnSpriteSheet: {
                                 col: el['@attributes'].id % 16,
                                 row: Math.floor(el['@attributes'].id / 16)
