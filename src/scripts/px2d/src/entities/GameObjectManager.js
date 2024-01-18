@@ -17,6 +17,12 @@ export class GameObjectManager {
         this.gameObjects.push(gameObject);
     }
 
+    addGameObjects(data = []) {
+        data.forEach((gameObject) => {
+            this.gameObjects.push(gameObject);
+        });
+    }
+
     UpdateGameObjects(deltaTime) {
         this.gameObjects.forEach((gameObject) => {
             gameObject.Update(deltaTime);

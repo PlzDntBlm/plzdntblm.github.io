@@ -2,6 +2,7 @@ import {GameLoop} from "./src/core/GameLoop.js";
 import {GameObjectManager} from "./src/entities/GameObjectManager.js";
 import {Player} from "./src/entities/Player.js";
 import {Tile} from "./src/entities/Tile.js";
+import {Scene} from "./src/scenes/Scene.js";
 
 class Game {
     constructor(px2d) {
@@ -31,9 +32,13 @@ class Game {
         let tile = new Tile();
         tile.px2d = this.px2d;
         tile.setTileType(0);
-        tile.tile.position.col = 1;
+        tile.tile.position.col = 3;
         tile.tile.position.row = 2;
-        this.gameObjectManager.addGameObject(tile);
+
+        let scene = new Scene();
+        Scene.SetTileInTileMap(scene.tileMap, tile);
+
+        this.gameObjectManager.addGameObjects(scene.tileMap);
 
 
         //const enemies = createEnemies();

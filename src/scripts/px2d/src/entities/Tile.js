@@ -13,22 +13,17 @@ export class Tile extends GameObject {
         data.tile.position.col = data.tile.position.col || 0;
 
         this.tile = data.tile;
-        this.renderer.imageSrc = Tile.getTileSourceByNumber(this.tile.type);
+        this.setTileType(data.tile.type);
 
         this.renderer.drawMode = 'texture';
         this.transform.sizeInPixel.x = 16;
         this.transform.sizeInPixel.y = 16;
     }
 
-    static getTileSourceByNumber(typeNumber) {
-        // MissingTexture
-        if (typeNumber === 0) {
-            return '/images/Tile_Missing.png';
-        } else {
-            console.log(`Can't convert ${typeNumber} into valid Tile Type!`);
-            return '/images/Tile_Missing.png';
-        }
-    }
+    static Tiles = [
+        {id: 0, name: 'Missing', source: '/images/Tile_0_Missing.png'},
+        {id: 1, name: 'Brick_Wall', source: '/images/Tile_1_Brick_Wall.png'}
+    ];
 
     static tileCoordinatesToPixelPosition(px2d, data = {}) {
         data = {
@@ -47,13 +42,24 @@ export class Tile extends GameObject {
             return {x: x, y: y};
         }
     }
-
-    setTileType(typeNumber) {
-        if (typeof typeNumber === 'number') {
-            this.tile.type = typeNumber;
-            this.renderer.imageSrc = Tile.getTileSourceByNumber(typeNumber);
+    
+    setTileType(wantedType) {
+        if (typeof wantedType === 'number') {
+            Tile.Tiles.find((element) => {
+                if (element.id === wantedType) {
+                    this.tile.type = element.id;
+                    this.renderer.imageSrc = element.source;
+                }
+            });
+        } else if (typeof wantedType === 'string') {
+            Tile.Tiles.find((element) => {
+                if (element.name.toLowerCase() === wantedType.toLowerCase()) {
+                    this.tile.type = element.id;
+                    this.renderer.imageSrc = element.source;
+                }
+            })
         } else {
-            console.log(`Can't convert ${typeNumber} into a valid number!`);
+            console.log(`Can't convert ${wantedType} into a valid tile type!`);
         }
     }
 
