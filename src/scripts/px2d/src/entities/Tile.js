@@ -22,7 +22,7 @@ export class Tile extends GameObject {
         this.transform.sizeInPixel.y = 16;
     }
 
-    static tileCoordinatesToPixelPosition(px2d, data = {}) {
+    static tileCoordinatesToPixelPosition(data = {}) {
         data = {
             col: data.col || 0,
             row: data.row || 0
@@ -40,7 +40,7 @@ export class Tile extends GameObject {
         }
     }
 
-    setTileType(wantedType) {
+    DEADsetTileType(wantedType) {
         console.log(this.px2d)
         //console.log(`requested tile of type: ${wantedType}`)
         if (typeof wantedType === 'number') {
@@ -64,6 +64,24 @@ export class Tile extends GameObject {
 
     Render() {
         console.log("----------------------------");
+        console.log(this);
+        // Draw on column
+        let tmpPosition = {col: this.tile.position.col, row: this.tile.position.row};//check
+        console.log(tmpPosition);//check
+        let tmpCoordinates = Tile.tileCoordinatesToPixelPosition(tmpPosition);//check
+        tmpCoordinates.y += 16;//check
+        console.log(tmpCoordinates);//check
+        let tmpSize = this.transform.sizeInPixel;//check
+        console.log(this.transform.sizeInPixel);//check
+        let tmpType = this.tile.type;
+        console.log(tmpType);
+
+        //Px2D.Px2DContext.drawImage(Tileset.SpriteSheet, tileCoordinates.x, tileCoordinates.y, this.transform.sizeInPixel.x, this.transform.sizeInPixel.y, sourceTile.source.locationOnSpriteSheet.col * 16, sourceTile.source.locationOnSpriteSheet.row * 16 + 16, 16, 16);
+        console.log("----------------------------");
+    }
+
+    DEADRender() {
+        console.log("----------------------------");
         // find coordinates of source image to draw
         let sourceTile = {};
         sourceTile = Tileset.TileSet.find((el) => {
@@ -86,7 +104,7 @@ export class Tile extends GameObject {
             console.log(Tileset.TileSet)
             console.log("----------------------------");
         }
-        const tileCoordinates = Tile.tileCoordinatesToPixelPosition(this.px2d, {
+        const tileCoordinates = Tile.tileCoordinatesToPixelPosition({
             col: this.tile.position.col,
             row: this.tile.position.row
         })

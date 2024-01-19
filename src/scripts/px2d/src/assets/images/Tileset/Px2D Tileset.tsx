@@ -14,6 +14,7 @@
  <tile id="17" type="Wall_Brick_Left_Outer"/>
  <tile id="18" type="Wall_Brick_Middle"/>
  <tile id="19" type="Wall_Brick_Right_Outer"/>
+ <tile id="20" type="Wall_Brick_Left_InnerCorner_Rounded"/>
  <tile id="21" type="Wall_Brick_Middle_InnerCorner_Rounded"/>
  <tile id="22" type="Wall_Brick_Right_InnerCorner_Rounded"/>
  <tile id="23" type="Wall_Brick_Left_Half_Floor"/>
