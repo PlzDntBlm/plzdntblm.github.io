@@ -37,6 +37,7 @@ export class Scene {
         let colCounter = 0;
         let rowCounter = 0;
         Hub.layers[0].data.forEach((tile) => { // Using arrow function
+            tile = --tile;
             Scene.SetTileInTileMap(this.tileMap, tile, colCounter, rowCounter);
             colCounter++;
             if (colCounter % 16 === 0) {
@@ -44,6 +45,6 @@ export class Scene {
                 colCounter = 0;
             }
         });
-        console.log(Hub.layers[0].data);
+        //console.log(Hub.layers[0].data);
     }
 }
