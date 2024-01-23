@@ -2,7 +2,7 @@ import {Px2D} from "../../../Px2D.js";
 
 export class TileSet {
     constructor() {
-        console.log("Constructed Tileset");
+        console.log("Constructed TileSet");
     }
 
     async loadTilesetFromFile() {
@@ -15,8 +15,8 @@ export class TileSet {
 
             TileSet.SpriteSheet = new Image();
             TileSet.SpriteSheet.onload = () => {
-                console.log(TileSet.SpriteSheet instanceof HTMLImageElement); // True
-                console.log(TileSet.SpriteSheet.complete); // True
+                //console.log(TileSet.SpriteSheet instanceof HTMLImageElement); // True
+                //console.log(TileSet.SpriteSheet.complete); // True
                 console.log("Loaded SpriteSheet");
 
                 // Here, you can now safely use Tileset.SpriteSheet for rendering, etc.
@@ -38,7 +38,7 @@ export class TileSet {
                     }
                 });
             });
-            console.log("Create TileSet");
+            console.log("Created TileSet");
         } catch (error) {
             console.error('Error fetching the .tsx file:', error);
         }

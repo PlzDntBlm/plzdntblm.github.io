@@ -19,8 +19,16 @@ class Game {
     async Init() {
         this.gameObjectManager = await new GameObjectManager();
         await this.loadAssets().then(() => {
+            console.log("Assets Loaded");
             this.startGame();
         });
+    }
+
+    async loadAssets() {
+        console.log("Loading Assets")
+        // Load assets
+        this.tileSet = new TileSet();
+        await this.tileSet.loadTilesetFromFile();
     }
 
     StartGameLoop() {
@@ -50,13 +58,6 @@ class Game {
 
         // Instantiate and start the game loop
         this.gameLoop.GameLoop();
-    }
-
-    async loadAssets() {
-        console.log("Loading Assets")
-        // Load assets
-        this.tileSet = new TileSet();
-        await this.tileSet.loadTilesetFromFile();
     }
 
     startGame() {

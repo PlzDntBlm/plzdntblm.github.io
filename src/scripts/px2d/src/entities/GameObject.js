@@ -28,6 +28,7 @@ export class GameObject {
         this.renderer = {
             imageSrc: data.renderer.imageSrc || null,
             drawMode: data.renderer.drawMode || 'rect',
+            redraw: data.renderer.redraw || false,
             fillColor: data.renderer.fillColor || 'black',
         };
     }
