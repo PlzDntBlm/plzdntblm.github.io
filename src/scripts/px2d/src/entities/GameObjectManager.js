@@ -3,6 +3,7 @@ import {GameObject} from "./GameObject.js";
 export class GameObjectManager {
     constructor() {
         this.gameObjects = [];
+        console.log("Constructed GameObjectManager");
     }
 
     getGameObjects() {

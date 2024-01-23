@@ -7,31 +7,32 @@ import {Tileset} from "./src/scenes/Tilemaps/Tileset.js";
 
 class Game {
     constructor(px2d) {
+        console.log("Constructing Game");
         this.px2d = px2d;
-        this.gameLoop = new GameLoop(px2d);
-        this.gameObjectManager = new GameObjectManager();
+        this.gameLoop = {};
         this.tileSet = {};
+        Game.Instance = this;
     }
+
+    static Instance = {}
 
     async Init() {
-        await this.StartGameLoop();
+        this.gameObjectManager = await new GameObjectManager();
+        await this.loadAssets().then(() => {
+            this.startGame();
+        });
     }
 
-    async StartGameLoop() {
-        // Load assets
-        //await loadAssets();
-        this.tileSet = await new Tileset(this.px2d);
-
+    StartGameLoop() {
         let scene = new Scene(this.px2d);
-
 
         // Initialize game entities
 
         // Initialize player
         this.player = new Player();
         this.player.px2d = this.px2d;
-        this.player.transform.position.x = 16;
-        this.player.transform.position.y = 16;
+        this.player.transform.position.x = 16 * 3.5;
+        this.player.transform.position.y = 16 * 7;
         this.gameObjectManager.addGameObject(this.player);
 
         // Initialize tiles
@@ -49,6 +50,17 @@ class Game {
 
         // Instantiate and start the game loop
         this.gameLoop = new GameLoop(this);
+    }
+
+    async loadAssets() {
+        console.log("Loading Assets")
+        // Load assets
+        this.tileSet = new Tileset();
+        await this.tileSet.loadTilesetFromFile();
+    }
+
+    startGame() {
+        this.StartGameLoop();
     }
 }
 

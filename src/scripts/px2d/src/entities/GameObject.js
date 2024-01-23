@@ -1,3 +1,5 @@
+import {Px2D} from "../../Px2D.js";
+
 export class GameObject {
     constructor(data = {}) {
         // Set default values if data or its properties are undefined
@@ -39,17 +41,16 @@ export class GameObject {
     }
 
     Render() {
-        const context = this.px2d.context;
         if (this.renderer.drawMode === 'rect') {
-            context.beginPath();
-            context.fillStyle = this.renderer.fillColor;
-            context.fillRect(this.transform.position.x, this.transform.position.y, this.transform.sizeInPixel.x, this.transform.sizeInPixel.y);
-            context.stroke();
+            Px2D.Instance.context.beginPath();
+            Px2D.Instance.context.fillStyle = this.renderer.fillColor;
+            Px2D.Instance.context.fillRect(this.transform.position.x, this.transform.position.y, this.transform.sizeInPixel.x, this.transform.sizeInPixel.y);
+            Px2D.Instance.context.stroke();
         }
         if (this.renderer.drawMode === 'texture') {
             const img = new Image();
             img.src = this.px2d.assetsPath + this.renderer.imageSrc;
-            context.drawImage(img, this.transform.position.x, this.transform.position.y, this.transform.sizeInPixel.x, this.transform.sizeInPixel.y);
+            Px2D.Instance.context.drawImage(img, this.transform.position.x, this.transform.position.y, this.transform.sizeInPixel.x, this.transform.sizeInPixel.y);
         }
     }
 

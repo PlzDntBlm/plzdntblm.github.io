@@ -20,7 +20,7 @@ export class Scene {
             if (arguments.length === 4) {
                 let tile = new Tile();
 
-                tile.px2d = Px2D.Px2DContext;
+                tile.px2d = Px2D.Instance.Px2DContext;
                 tile.tile.type = tileType;
                 tile.tile.position.col = col;
                 tile.tile.position.row = row;

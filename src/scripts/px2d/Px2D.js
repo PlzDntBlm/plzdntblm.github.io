@@ -4,6 +4,7 @@ import {Game} from "./Game.js";
 
 class Px2D {
     constructor() {
+        Px2D.Instance = this;
         this.program = new Program("Px 2D");
         this.game = null;
         this.context = null;
@@ -13,6 +14,8 @@ class Px2D {
         }
         this.assetsPath = "./src/scripts/px2d/src/assets/";
     }
+
+    static Instance = {};
 
     static Px2DContext = {}
 
@@ -31,13 +34,13 @@ class Px2D {
     async Start() {
         this.program.ui.appendParagraphToOutput(`Welcome to Px 2D!<br>Opened new Window.`, 'machineParagraph');
         // Call the function to add the overlay to the document
-        this.setup().then(() => {
+        this.setup().then(async () => {
             this.game = new Game(this);
-            this.game.Init();
+            await this.game.Init();
         });
     }
 
-    addOverlay() {
+    async addOverlay() {
         this.program.ui.focusInput = false;
         this.program.ui.userInput.blur();
         // Create overlay element
@@ -58,7 +61,7 @@ class Px2D {
         const canvasDiv = document.querySelector("#canvas");
         canvasDiv.append(this.overlay);
         this.context = document.querySelector("#px2d-canvas").getContext("2d");
-        Px2D.Px2DContext = this.context;
+        Px2D.Px2DContext = await this.context;
         startResizing();
     }
 

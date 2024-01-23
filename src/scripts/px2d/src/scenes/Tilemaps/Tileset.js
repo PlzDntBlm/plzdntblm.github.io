@@ -1,34 +1,44 @@
+import {Px2D} from "../../../Px2D.js";
+
 export class Tileset {
-    constructor(px2d) {
+    constructor() {
+        console.log("Constructed Tileset");
+    }
+
+    async loadTilesetFromFile() {
         let tsxFileContent = "";
-        fetch(px2d.assetsPath + "images/Tileset/Px2D Tileset.tsx")
-            .then(response => response.text())
-            .then(text => {
-                tsxFileContent = text;
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(tsxFileContent, "text/xml");
-                let tileSetJson = this.xmlToJson(xmlDoc);
+        try {
+            fetch(Px2D.Instance.assetsPath + "images/Tileset/Px2D Tileset.tsx")
+                .then(response => response.text())
+                .then(text => {
+                    tsxFileContent = text;
+                    const parser = new DOMParser();
+                    const xmlDoc = parser.parseFromString(tsxFileContent, "text/xml");
+                    let tileSetJson = this.xmlToJson(xmlDoc);
 
-                Tileset.SpriteSheet = new Image();
-                Tileset.SpriteSheet.src = px2d.assetsPath + "images/Pyxel SpriteSheet.png";
-                tileSetJson.tileset.tile.forEach((el) => {
-                    Tileset.TileSet.push({
-                        tileNumber: Number(el['@attributes'].id), type: el['@attributes'].type, source: {
-                            locationOnSpriteSheet: {
-                                col: el['@attributes'].id % 16,
-                                row: Math.floor(el['@attributes'].id / 16)
+                    Tileset.SpriteSheet = new Image();
+                    Tileset.SpriteSheet.src = Px2D.Instance.assetsPath + "images/Pyxel SpriteSheet.png";
+                    tileSetJson.tileset.tile.forEach((el) => {
+                        Tileset.TileSet.push({
+                            tileNumber: Number(el['@attributes'].id), type: el['@attributes'].type, source: {
+                                locationOnSpriteSheet: {
+                                    col: el['@attributes'].id % 16,
+                                    row: Math.floor(el['@attributes'].id / 16)
+                                }
                             }
-                        }
+                        });
                     });
+                    //row = field_number // num_columns
+                    //col = field_number % num_columns
+                    console.log("Loaded TileSet");
+                })
+                .catch(error => {
+                    console.error('Error fetching the .tsx file:', error);
                 });
-                //row = field_number // num_columns
-                //col = field_number % num_columns
-
-                // Rest of code...
-            })
-            .catch(error => {
-                console.error('Error fetching the .tsx file:', error);
-            });
+        } catch (e) {
+            console.log(e)
+            console.error("Could not load TileSet");
+        }
     }
 
     static TileSet = [];

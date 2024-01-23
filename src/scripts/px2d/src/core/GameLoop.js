@@ -1,12 +1,17 @@
+import {Tileset} from "../scenes/Tilemaps/Tileset.js";
+import {Game} from "../../Game.js";
+import {Px2D} from "../../Px2D.js";
+
 export class GameLoop {
-    constructor(px2d) {
-        this.frameCounter = 0;
-        this.px2d = px2d;
+    constructor() {
         this.lastRenderTime = 0;
         this.accumulatedTime = 0;
         this.fixedTimeStep = 1000 / 60; // 60 updates per second
         requestAnimationFrame((timestamp) => this.GameLoop(timestamp));
+        console.log("Constructed GameLoop")
     }
+
+    static FrameCounter = 0;
 
     GameLoop(timestamp) {
         let deltaTime = timestamp - this.lastRenderTime;
@@ -26,24 +31,23 @@ export class GameLoop {
 
     Update(deltaTime) {
         // Update game entities and logic based on variable deltaTime
-        if (this.px2d.game)
-            this.px2d.game.gameObjectManager.UpdateGameObjects(deltaTime);
+        if (Game)
+            Game.Instance.gameObjectManager.UpdateGameObjects(deltaTime);
     }
 
     FixedUpdate(fixedDeltaTime) {
         // Consistent update logic, independent of frame rate
-        this.px2d.game.gameObjectManager.FixedUpdateGameObjects(fixedDeltaTime);
+        Game.Instance.gameObjectManager.FixedUpdateGameObjects(fixedDeltaTime);
     }
 
     Render() {
-        this.frameCounter++;
-
-        if (this.px2d.context) {
+        GameLoop.FrameCounter++;
+        if (Px2D.Instance.context) {
             // Clear canvas and draw game entities
-            this.px2d.context.clearRect(0, 0, this.px2d.overlay.firstChild.width, this.px2d.overlay.firstChild.height);
+            Px2D.Instance.context.clearRect(0, 0, Px2D.Instance.overlay.firstChild.width, Px2D.Instance.overlay.firstChild.height);
 
             // Drawing logic...
-            this.px2d.game.gameObjectManager.RenderGameObjects(this.px2d);
+            Game.Instance.gameObjectManager.RenderGameObjects(Px2D);
         }
     }
 }
