@@ -2,6 +2,7 @@ import {GameObject} from "./GameObject.js";
 import {TileSet} from "../scenes/Tilemaps/TileSet.js";
 import {Px2D} from "../../Px2D.js";
 import {GameLoop} from "../core/GameLoop.js";
+import {AABB} from "../utils/collider/AABB.js";
 
 export class Tile extends GameObject {
     constructor(data = {}) {
@@ -14,9 +15,10 @@ export class Tile extends GameObject {
         data.tile.position = data.tile.position || {};
         data.tile.position.row = data.tile.position.row || 0;
         data.tile.position.col = data.tile.position.col || 0;
+        data.solid = data.solid || false;
 
         this.tile = data.tile;
-        //this.setTileType(data.tile.type);
+        this.collider = this.tile.solid ? new AABB() : null;
 
         this.renderer.drawMode = 'texture';
         this.transform.sizeInPixel.x = 16;

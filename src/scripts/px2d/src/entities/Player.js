@@ -2,6 +2,7 @@ import {GameObject} from "./GameObject.js";
 import {Px2D} from "../../Px2D.js";
 import {CharacterController} from "./CharacterController.js";
 import {Rigidbody} from "./Rigidbody.js";
+import {AABB} from "../utils/collider/AABB.js";
 
 export class Player extends GameObject {
     constructor() {
@@ -13,18 +14,16 @@ export class Player extends GameObject {
         this.transform.sizeInPixel.y = 16;
         this.renderer.redraw = true;
         this.renderer.image = new Image();
+        console.log("Loaded Player Image");
         this.renderer.image.src = Px2D.Instance.assetsPath + this.renderer.imageSrc;
         this.characterController = new CharacterController(this);
-        console.log("Loaded Player Image");
         console.log("Constructed Player");
     }
 
     Init() {
-        this.rigidbody = new Rigidbody(1, 0.00001);
+        this.rigidbody = new Rigidbody(1, 0.001);
         this.rigidbody.transform.position = {...this.transform.position};
-        console.log(this.transform.position);
         console.log("Assigned Player position to Rigidbody");
-        console.log(this.rigidbody.transform.position);
     }
 
     Update(deltaTime) {
@@ -34,11 +33,15 @@ export class Player extends GameObject {
         // Other player updates such as handling input
         // ...
 
-        // After physics update, adjust player position based on Rigidbody's calculations
+        this.rigidbody.Update(deltaTime);
         this.transform.position.x = this.rigidbody.transform.position.x;
         this.transform.position.y = this.rigidbody.transform.position.y;
 
-        // Check collisions to update isGrounded status for correct gravity application
+        // Update the collider position
+        this.collider.x = this.transform.position.x;
+        this.collider.y = this.transform.position.y;
+
+        // Handle collisions
         // ...
     }
 

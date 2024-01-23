@@ -33,6 +33,11 @@ export class GameObject {
         };
     }
 
+    // Method to handle collisions with another object
+    OnCollision(otherObject) {
+        // Default collision response
+    }
+
     Update(deltaTime) {
 
     }

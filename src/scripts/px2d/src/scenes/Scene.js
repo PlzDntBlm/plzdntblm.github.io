@@ -1,6 +1,7 @@
 import {Tile} from "../entities/Tile.js";
 import {Hub} from "../assets/scenes/Hub.js";
 import {Px2D} from "../../Px2D.js";
+import {AABB} from "../utils/collider/AABB.js";
 
 export class Scene {
     constructor(px2d) {
@@ -24,7 +25,10 @@ export class Scene {
                 tile.tile.type = tileType;
                 tile.tile.position.col = col;
                 tile.tile.position.row = row;
-
+                // Hard coded tile collider
+                tile.solid = true;
+                let tmpPixelPositionTile = Tile.tileCoordinatesToPixelPosition(tile.tile.position);
+                tile.collider = new AABB(tmpPixelPositionTile.x, tmpPixelPositionTile.y, tile.transform.sizeInPixel.x, tile.transform.sizeInPixel.y);
 
                 tileMap[row * 16 + col] = tile;
             }

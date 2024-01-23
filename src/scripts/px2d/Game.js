@@ -4,6 +4,7 @@ import {Player} from "./src/entities/Player.js";
 import {Tile} from "./src/entities/Tile.js";
 import {Scene} from "./src/scenes/Scene.js";
 import {TileSet} from "./src/scenes/Tilemaps/TileSet.js";
+import {AABB} from "./src/utils/collider/AABB.js";
 
 class Game {
     constructor(px2d) {
@@ -36,6 +37,12 @@ class Game {
         this.player = new Player();
         this.player.transform.position.x = 16 * 3.5;
         this.player.transform.position.y = 16 * 7;
+        this.player.solid = true;
+        this.player.collider = new AABB(
+            this.player.transform.position.x,
+            this.player.transform.position.y,
+            this.player.transform.sizeInPixel.x,
+            this.player.transform.sizeInPixel.y);
         this.player.Init();
     }
 
