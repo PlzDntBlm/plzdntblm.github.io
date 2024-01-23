@@ -11,6 +11,7 @@ class Game {
         this.px2d = px2d;
         this.gameLoop = new GameLoop();
         this.tileSet = {};
+        this.assetsLoaded = false;
         Game.Instance = this;
     }
 
@@ -18,10 +19,10 @@ class Game {
 
     async Init() {
         this.gameObjectManager = await new GameObjectManager();
-        await this.loadAssets().then(() => {
-            console.log("Assets Loaded");
-            this.startGame();
-        });
+        await this.loadAssets();
+        console.log("Assets Loaded");
+        this.assetsLoaded = true;
+        this.startGame();
     }
 
     async loadAssets() {
@@ -29,24 +30,29 @@ class Game {
         // Load assets
         this.tileSet = new TileSet();
         await this.tileSet.loadTilesetFromFile();
-    }
-
-    StartGameLoop() {
-        let scene = new Scene(this.px2d);
-
         // Initialize game entities
 
         // Initialize player
         this.player = new Player();
-        this.player.px2d = this.px2d;
         this.player.transform.position.x = 16 * 3.5;
         this.player.transform.position.y = 16 * 7;
+        this.player.Init();
+    }
+
+    StartGameLoop() {
+        this.gameLoop.Init();
+    }
+
+    startGame() {
+        let scene = new Scene(this.px2d);
+
         this.gameObjectManager.addGameObject(this.player);
 
         // Initialize tiles
 
         this.gameObjectManager.addGameObjects(scene.tileMap);
 
+        console.log("Loaded GameObjects");
 
         //const enemies = createEnemies();
 
@@ -57,10 +63,7 @@ class Game {
         // ...
 
         // Instantiate and start the game loop
-        this.gameLoop.GameLoop();
-    }
 
-    startGame() {
         this.StartGameLoop();
     }
 }

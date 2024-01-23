@@ -7,10 +7,17 @@ export class GameLoop {
         this.lastRenderTime = 0;
         this.accumulatedTime = 0;
         this.fixedTimeStep = 1000 / 60; // 60 updates per second
+        this.running = false;
         console.log("Constructed GameLoop")
     }
 
     static FrameCounter = 0;
+
+    Init() {
+        requestAnimationFrame((timestamp) => this.GameLoop(timestamp));
+        this.running = true;
+        console.log("Started GameLoop");
+    }
 
     GameLoop(timestamp) {
         let deltaTime = timestamp - this.lastRenderTime;
@@ -30,7 +37,7 @@ export class GameLoop {
 
     Update(deltaTime) {
         // Update game entities and logic based on variable deltaTime
-        if (Game)
+        if (Game.Instance.assetsLoaded)
             Game.Instance.gameObjectManager.UpdateGameObjects(deltaTime);
     }
 

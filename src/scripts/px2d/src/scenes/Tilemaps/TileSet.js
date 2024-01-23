@@ -5,43 +5,48 @@ export class TileSet {
         console.log("Constructed TileSet");
     }
 
-    async loadTilesetFromFile() {
-        try {
-            const response = await fetch(Px2D.Instance.assetsPath + "images/Tileset/Px2D Tileset.tsx");
-            const tsxFileContent = await response.text();
-            const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(tsxFileContent, "text/xml");
-            const tileSetJson = this.xmlToJson(xmlDoc);
+    loadTilesetFromFile() {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const response = await fetch(Px2D.Instance.assetsPath + "images/Tileset/Px2D Tileset.tsx");
+                const tsxFileContent = await response.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(tsxFileContent, "text/xml");
+                const tileSetJson = this.xmlToJson(xmlDoc);
 
-            TileSet.SpriteSheet = new Image();
-            TileSet.SpriteSheet.onload = () => {
-                //console.log(TileSet.SpriteSheet instanceof HTMLImageElement); // True
-                //console.log(TileSet.SpriteSheet.complete); // True
-                console.log("Loaded SpriteSheet");
+                TileSet.SpriteSheet = new Image();
+                TileSet.SpriteSheet.onload = () => {
+                    //console.log(TileSet.SpriteSheet instanceof HTMLImageElement); // True
+                    //console.log(TileSet.SpriteSheet.complete); // True
+                    console.log("Loaded SpriteSheet");
+                    resolve();
 
-                // Here, you can now safely use Tileset.SpriteSheet for rendering, etc.
-            };
-            TileSet.SpriteSheet.onerror = (error) => {
-                console.error('Error loading the sprite sheet image:', error);
-            };
-            TileSet.SpriteSheet.src = Px2D.Instance.assetsPath + "images/Pyxel SpriteSheet.png";
+                    // Here, you can now safely use Tileset.SpriteSheet for rendering, etc.
+                };
+                TileSet.SpriteSheet.onerror = (error) => {
+                    console.error('Error loading the sprite sheet image:', error);
+                    reject();
+                };
+                TileSet.SpriteSheet.src = Px2D.Instance.assetsPath + "images/Pyxel SpriteSheet.png";
 
-            tileSetJson.tileset.tile.forEach((el) => {
-                TileSet.TileSet.push({
-                    tileNumber: Number(el['@attributes'].id),
-                    type: el['@attributes'].type,
-                    source: {
-                        locationOnSpriteSheet: {
-                            col: el['@attributes'].id % 16,
-                            row: Math.floor(el['@attributes'].id / 16)
+                tileSetJson.tileset.tile.forEach((el) => {
+                    TileSet.TileSet.push({
+                        tileNumber: Number(el['@attributes'].id),
+                        type: el['@attributes'].type,
+                        source: {
+                            locationOnSpriteSheet: {
+                                col: el['@attributes'].id % 16,
+                                row: Math.floor(el['@attributes'].id / 16)
+                            }
                         }
-                    }
+                    });
                 });
-            });
-            console.log("Created TileSet");
-        } catch (error) {
-            console.error('Error fetching the .tsx file:', error);
-        }
+                console.log("Created TileSet");
+            } catch (error) {
+                console.error('Error fetching the .tsx file:', error);
+                reject();
+            }
+        });
     }
 
     static TileSet = [];
