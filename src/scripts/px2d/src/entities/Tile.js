@@ -1,5 +1,5 @@
 import {GameObject} from "./GameObject.js";
-import {Tileset} from "../scenes/Tilemaps/Tileset.js";
+import {TileSet} from "../scenes/Tilemaps/TileSet.js";
 import {Px2D} from "../../Px2D.js";
 import {GameLoop} from "../core/GameLoop.js";
 
@@ -61,7 +61,7 @@ export class Tile extends GameObject {
             // Safe to draw the image
             try {
                 Px2D.Px2DContext.drawImage(
-                    Tileset.SpriteSheet,
+                    TileSet.SpriteSheet,
                     tmpSource.col * 16, // Source X: Column index multiplied by the width of one tile
                     tmpSource.row * 16, // Source Y: Row index multiplied by the height of one tile
                     16, // Source Width: The width of one tile
@@ -77,7 +77,7 @@ export class Tile extends GameObject {
             } catch (e) {
                 console.log(GameLoop.FrameCounter)
                 console.log(e);
-                console.log(Tileset.SpriteSheet)
+                console.log(TileSet.SpriteSheet)
                 console.log("----------------------------");
             }
         }

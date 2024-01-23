@@ -3,13 +3,13 @@ import {GameObjectManager} from "./src/entities/GameObjectManager.js";
 import {Player} from "./src/entities/Player.js";
 import {Tile} from "./src/entities/Tile.js";
 import {Scene} from "./src/scenes/Scene.js";
-import {Tileset} from "./src/scenes/Tilemaps/Tileset.js";
+import {TileSet} from "./src/scenes/Tilemaps/TileSet.js";
 
 class Game {
     constructor(px2d) {
         console.log("Constructing Game");
         this.px2d = px2d;
-        this.gameLoop = {};
+        this.gameLoop = new GameLoop();
         this.tileSet = {};
         Game.Instance = this;
     }
@@ -49,13 +49,13 @@ class Game {
         // ...
 
         // Instantiate and start the game loop
-        this.gameLoop = new GameLoop(this);
+        this.gameLoop.GameLoop();
     }
 
     async loadAssets() {
         console.log("Loading Assets")
         // Load assets
-        this.tileSet = new Tileset();
+        this.tileSet = new TileSet();
         await this.tileSet.loadTilesetFromFile();
     }
 

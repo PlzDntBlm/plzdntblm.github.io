@@ -1,4 +1,4 @@
-import {Tileset} from "../scenes/Tilemaps/Tileset.js";
+import {TileSet} from "../scenes/Tilemaps/TileSet.js";
 import {Game} from "../../Game.js";
 import {Px2D} from "../../Px2D.js";
 
@@ -7,7 +7,6 @@ export class GameLoop {
         this.lastRenderTime = 0;
         this.accumulatedTime = 0;
         this.fixedTimeStep = 1000 / 60; // 60 updates per second
-        requestAnimationFrame((timestamp) => this.GameLoop(timestamp));
         console.log("Constructed GameLoop")
     }
 
@@ -42,12 +41,8 @@ export class GameLoop {
 
     Render() {
         GameLoop.FrameCounter++;
-        if (Px2D.Instance.context) {
-            // Clear canvas and draw game entities
-            Px2D.Instance.context.clearRect(0, 0, Px2D.Instance.overlay.firstChild.width, Px2D.Instance.overlay.firstChild.height);
-
-            // Drawing logic...
-            Game.Instance.gameObjectManager.RenderGameObjects(Px2D);
-        }
+        // Clear canvas and draw game entities
+        Px2D.Instance.context.clearRect(0, 0, Px2D.Instance.overlay.firstChild.width, Px2D.Instance.overlay.firstChild.height);
+        Game.Instance.gameObjectManager.RenderGameObjects(Px2D);
     }
 }
