@@ -18,13 +18,17 @@ export class Scene {
                 tileMap[tileType.tile.position.row * 16 + tileType.tile.position.col] = tileType;
             }
             // tileMap, tileType, col, row
-            if (arguments.length === 4) {
+            if (arguments.length === 4 && tileType !== -1) {
                 let tile = new Tile();
 
                 tile.px2d = Px2D.Instance.Px2DContext;
                 tile.tile.type = tileType;
                 tile.tile.position.col = col;
                 tile.tile.position.row = row;
+                tile.transform.position = {
+                    x: col * 16,
+                    y: row * 16
+                }
                 // Hard coded tile collider
                 tile.solid = true;
                 let tmpPixelPositionTile = Tile.tileCoordinatesToPixelPosition(tile.tile.position);

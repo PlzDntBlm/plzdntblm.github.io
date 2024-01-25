@@ -1,4 +1,5 @@
 import {Collider} from "./Collider.js";
+import {Px2D} from "../../../Px2D.js";
 
 export class AABB extends Collider {
     // Checks if this AABB collides with another AABB
@@ -22,10 +23,10 @@ export class AABB extends Collider {
     }
 
     // A method to draw the AABB for debugging purposes
-    draw(context) {
-        context.beginPath();
-        context.rect(this.x, this.y, this.width, this.height);
-        context.strokeStyle = 'red';
-        context.stroke();
+    draw() {
+        Px2D.Instance.context.beginPath();
+        Px2D.Instance.context.rect(this.x, this.y, this.width, this.height);
+        Px2D.Instance.context.strokeStyle = 'red';
+        Px2D.Instance.context.stroke();
     }
 }

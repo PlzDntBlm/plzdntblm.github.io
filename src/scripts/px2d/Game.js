@@ -5,6 +5,7 @@ import {Tile} from "./src/entities/Tile.js";
 import {Scene} from "./src/scenes/Scene.js";
 import {TileSet} from "./src/scenes/Tilemaps/TileSet.js";
 import {AABB} from "./src/utils/collider/AABB.js";
+import {GameObject} from "./src/entities/GameObject.js";
 
 class Game {
     constructor(px2d) {
@@ -44,6 +45,13 @@ class Game {
             this.player.transform.sizeInPixel.x,
             this.player.transform.sizeInPixel.y);
         this.player.Init();
+
+        this.gizmo = new GameObject();
+        this.gizmo.renderer.fillColor = 'yellowgreen';
+        this.gizmo.transform.position = {
+            x: 128,
+            y: 128
+        }
     }
 
     StartGameLoop() {
@@ -58,7 +66,7 @@ class Game {
         // Initialize tiles
 
         this.gameObjectManager.addGameObjects(scene.tileMap);
-
+        //this.gameObjectManager.addGameObject(this.gizmo);
         console.log("Loaded GameObjects");
 
         //const enemies = createEnemies();

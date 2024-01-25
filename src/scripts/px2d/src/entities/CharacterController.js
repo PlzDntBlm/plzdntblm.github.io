@@ -24,21 +24,26 @@ export class CharacterController {
             case 'ArrowLeft':
             case 'KeyA':
                 this.inputState.left = true;
+                //console.log("left")
                 break;
             case 'ArrowRight':
             case 'KeyD':
                 this.inputState.right = true;
+                //console.log("right")
                 break;
             case 'ArrowDown':
             case 'KeyS':
                 this.inputState.down = true;
+                //console.log("down")
                 break;
             case 'Space':
                 this.inputState.jump = true;
+                //console.log("up")
                 break;
             case 'KeyF':
             case 'Enter':
                 this.inputState.interact = true;
+                //console.log("interact")
                 break;
             // Add other cases as needed.
         }
