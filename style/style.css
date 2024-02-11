@@ -2,7 +2,8 @@ html {
     background-color: black;
     font-family: Consolas, monospace;
     color: greenyellow;
-    font-size: 2vh;
+    /*font-size: 2 vh;*/
+    font-size: 16px;
 }
 
 html::before {
@@ -39,7 +40,7 @@ p.userParagraph:before {
 }
 
 .machineParagraph {
-    color: blueviolet;
+    color: greenyellow;
 }
 
 .machineParagraph:before {
@@ -91,7 +92,7 @@ p.userParagraph:before {
 
 #userInput {
     font-family: Consolas, monospace;
-    font-size: 2vh;
+    font-size: 16px;
     color: greenyellow;
     background-color: transparent;
     border: none;
@@ -103,7 +104,7 @@ p.userParagraph:before {
 
 /* Style the placeholder text */
 #userInput::placeholder {
-    color: blueviolet; /* Placeholder text color */
+    color: greenyellow; /* Placeholder text color */
     font-family: Consolas, monospace /* Italicize the placeholder text */
 }
 
@@ -114,7 +115,7 @@ p.userParagraph:before {
 }
 
 #userInput::selection {
-    background-color: blueviolet;
+    background-color: greenyellow;
 }
 
 @keyframes blink {
