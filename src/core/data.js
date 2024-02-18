@@ -99,9 +99,11 @@ export let commands = {
 };
 
 export let player = {
-    hasDiarrhea: false
+    hasDiarrhea: false,
+    isHungry: false,
+    isTired: false,
+    hasEaten: false
 }
-
 export let environment = {
     "Room": {
         name: "Bedroom",
@@ -146,17 +148,17 @@ export let environment = {
                 "Examine": () => {
                     let newParagraph = {};
                     // door closed, door locked, no key
-                    if (this.open === false && !this.unlocked === false && !inventory.Key.inInventory === false) {
+                    if (environment.Room.interactables.Door.open === false && !environment.Room.interactables.Door.unlocked === false && !inventory.Key.inInventory === false) {
                         newParagraph.innerHTML = "The door that seems to lead outside doesn't appear to move. It's locked.";
                         appendToOutput(newParagraph);
                     }
                     // door closed, door locked, has key
-                    if (this.open === false && !this.unlocked === false && !inventory.Key.inInventory === true) {
+                    if (environment.Room.interactables.Door.open === false && !environment.Room.interactables.Door.unlocked === false && !inventory.Key.inInventory === true) {
                         newParagraph.innerHTML = "The door is locked. But maybe you have something you could use...";
                         appendToOutput(newParagraph);
                     }
                     // door closed, door unlocked, has key
-                    if (this.open === false && !this.unlocked === true) {
+                    if (environment.Room.interactables.Door.open === false && !environment.Room.interactables.Door.unlocked === true) {
                         newParagraph.innerHTML = "You stand in front of the unlocked but shut metal door.";
                         appendToOutput(newParagraph);
                     }
@@ -244,13 +246,25 @@ export let environment = {
                 },
                 "Use": () => {
                     let newParagraph = {};
-                    if (!player.hasDiarrhea) {
-                        newParagraph.innerHTML = "You lie down, attempting to find a moment of comfort on the hard, unwelcoming surface. It's far from perfect, but it's better than the cold floor.";
+                    if (player.isTired) {
+                        if (player.hasEaten) {
+                            newParagraph.innerHTML = `The weight of your full stomach pulls you down into an uneasy slumber on the stained mattress, enveloping you in its damp embrace. The filth doesn't bother you as much as the unsettling fullness within.`;
+                            appendToOutput(newParagraph);
+                            player.isTired = false;
+
+                            newParagraph.innerHTML = `A distressing churn in your belly awakens you, a dire need clawing at your insides. It's unmistakable; the urge to relieve yourself is overwhelming, signaling the onset of an unfortunate digestive rebellion.`;
+                            appendToOutput(newParagraph);
+                            player.hasDiarrhea = true;
+                        } else {
+                            newParagraph.innerHTML = `You collapse onto the mattress, your body eventually succumbing to sleep despite the grime. The brief escape from reality is punctuated by a hollow growl from your stomach upon waking, a stark reminder of your neglect.`;
+                            player.isHungry = true;
+                            player.isTired = false;
+                            appendToOutput(newParagraph);
+                        }
                     } else {
-                        // Assuming the player's condition affects their interaction with the bed
-                        newParagraph.innerHTML = "With your current condition, lying down seems risky. You decide against using the bed for now.";
+                        newParagraph.innerHTML = "The call to rest eludes you, leaving you in a state of wary alertness amidst the room's unyielding discomfort.";
+                        appendToOutput(newParagraph);
                     }
-                    appendToOutput(newParagraph);
                 },
                 "Take": () => {
                     let newParagraph = {};
@@ -288,7 +302,7 @@ export let environment = {
             environment.Kitchen["Look around"]();
         },
         "Use": () => {
-            // Placeholder for using kitchen utilities, to be expanded upon
+            environment.Kitchen.Cook();
         },
         "Cook": () => {
             let newParagraph = {};
@@ -330,7 +344,8 @@ export let environment = {
             environment.Room.Enter();
         },
         interactables: {
-            "Fridge": {}
+            "Fridge": {},
+            "Shelf": {}
         }
     },
     "Bathroom": {
@@ -441,15 +456,36 @@ export let currentRoom =
             this.value = x;
         }
     };
-export let test = null;
 export let inventory = {
     "Key": {
         inInventory: false,
+        description: "Its metal surface, though tarnished by its unexpected journey, glints with a sense of purpose."
     },
     "Note": {
         name: "Note",
         inInventory: false,
         text: `Key Inside`,
-        location: environment.Room.Table
+        location: environment.Room.Table,
+        description: "Its message, cryptic yet imperative, suggests a path forward or a secret to uncover, serving as a silent guide in your solitary journey."
+    },
+    "Simple Meal": {
+        inInventory: false,
+        used: false,
+        description: "It is straightforward in its appearance, with no pretense or complexity, yet there is an underlying assurance of nourishment. The simplicity of its composition, clear and devoid of excess, speaks to a basic yet profound fulfillment. This meal, unassuming in its essence, promises satisfaction in its simplicity, offering a momentary respite from the harshness of your surroundings, with a subtle invitation to partake in its quiet sustenance."
+    },
+    "Sacrilegious Meal": {
+        inInventory: false,
+        used: false,
+        description: "As you gaze upon this meal, its grotesque assembly assaults your senses. The colors are unnaturally vivid, clashing in a way that seems to wage war against your appetite. The stench hits you like a physical force, a miasma of rot and spoilage that clings to the air, daring you to take a closer look. Its composition, a mishmash of what should have never been combined, promises nothing but regret."
+    },
+    "Good Ingredients": {
+        inInventory: false,
+        used: false,
+        description: "In your hands, the canned ingredient feels like a promise of safety. Its sealed state assures you of its untouched, preserved quality. The label, though worn, hints at a content that has been spared the ravages of time. It's a small beacon of reliability in your uncertain world, offering a rare moment of culinary reprieve."
+    },
+    "Spoiled Ingredients": {
+        inInventory: false,
+        used: false,
+        description: "As you examine it, the mass from the fridge confronts you with its dismal state. It's an undefinable concoction, its original form lost to time and neglect. The colors have turned into unsettling shades, and the smell is overpowering, a stark reminder of decay. It's a gamble, holding potential danger as much as it does sustenance."
     }
 };

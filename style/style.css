@@ -1,9 +1,11 @@
 html {
     background-color: black;
-    font-family: Consolas, monospace;
+    font-family: "Press Start 2P", system-ui;
     color: greenyellow;
+    text-shadow: greenyellow 0 0 5px;
     /*font-size: 2 vh;*/
-    font-size: 16px;
+    font-size: 11px;
+    line-height: 20px;
 }
 
 html::before {
@@ -15,7 +17,6 @@ html::before {
     left: 0;
     filter: brightness(8%); /* Adjust the brightness */
     z-index: -1;
-    /*background-image: url("https://background-tiles.com/overview/grey/patterns/large/1045.png");*/
     background-repeat: repeat;
 }
 
@@ -32,15 +33,22 @@ p {
     -webkit-user-select: text;
     -ms-user-select: text;
     user-select: text;
+    line-height: 20px;
+}
+
+p.userParagraph {
+    line-height: 20px;
 }
 
 p.userParagraph:before {
     content: ">";
     margin-right: 6px;
+    line-height: 20px;
 }
 
 .machineParagraph {
     color: greenyellow;
+    line-height: 20px;
 }
 
 .machineParagraph:before {
@@ -91,21 +99,22 @@ p.userParagraph:before {
 }
 
 #userInput {
-    font-family: Consolas, monospace;
-    font-size: 16px;
+    font-family: "Press Start 2P", system-ui;
+    text-shadow: greenyellow 0 0 5px;
+    font-size: 11px;
+    line-height: 20px;
     color: greenyellow;
     background-color: transparent;
     border: none;
     width: 100%;
     resize: none;
     overflow: hidden;
-    /*caret-width: 10px; /* Set the cursor width to 2px (adjust as needed) */
 }
 
 /* Style the placeholder text */
 #userInput::placeholder {
-    color: greenyellow; /* Placeholder text color */
-    font-family: Consolas, monospace /* Italicize the placeholder text */
+    color: greenyellow;
+    font-family: "Press Start 2P", system-ui
 }
 
 /* Style when the input is focused (clicked) */
