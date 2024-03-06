@@ -47,8 +47,16 @@ export function handleGameCommand(input) {
                             }
                             if (currentRoom.value.interactables) { // Parameter is an interactable
                                 for (let interactablesKey in currentRoom.value.interactables) {
+                                    console.log(interactablesKey)
                                     if (normalizeParameter(parameter).toUpperCase() === interactablesKey.toUpperCase()) {
                                         target = currentRoom.value.interactables[interactablesKey];
+                                    }
+                                }
+                            }
+                            for (let item in inventory) {
+                                if (normalizeParameter(parameter).toUpperCase() === item.toUpperCase()) {
+                                    if(inventory[item].inInventory){
+                                        target = inventory[item];
                                     }
                                 }
                             }
@@ -105,7 +113,7 @@ function listInventoy() {
     let listString = `You currently are in possession of:</br>`;
     let itemsInPossesion = '';
     for (const [item, details] of Object.entries(inventory)) {
-        if (details.inInventory) {
+        if (details.ins) {
             itemsInPossesion += `${item}</br>`;
         }
     }

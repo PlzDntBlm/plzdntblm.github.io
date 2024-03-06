@@ -344,8 +344,66 @@ export let environment = {
             environment.Room.Enter();
         },
         interactables: {
-            "Fridge": {},
-            "Shelf": {}
+            "Fridge": {
+                isOpen : false,
+                "Examine": () => {
+                    let newParagraph = {};
+                    newParagraph.innerHTML = `Smudges and mold cover the once smooth white surface of the humming device.`;
+                    appendToOutput(newParagraph);
+                },
+                "Look at": () => {
+                    environment.Kitchen.interactables.Fridge.Examine();
+                },
+                "Take": () => {
+                    if(environment.Kitchen.interactables.Fridge.isOpen && !inventory["Spoiled Ingredients"].inInventory){
+                        inventory["Spoiled Ingredients"].Take();
+                    }else{
+                        environment.Kitchen.interactables.Fridge.Lift();
+                    }
+                },
+                "Use": () => {
+                    environment.Kitchen.interactables.Fridge.Take();
+                },
+                "Open": () => {
+                    let newParagraph = {};
+                    newParagraph.innerHTML = `There is a nasty wet sound as the mold between the rims of the door rip apart. A weird stench hits your nostrils. There's something inside.`;
+                    appendToOutput(newParagraph);
+                    environment.Kitchen.interactables.Fridge.isOpen = true;
+                },
+                "Lift": ()=>{
+                    let newParagraph = {};
+                    newParagraph.innerHTML = `You are to weak too carry this beast.`;
+                    appendToOutput(newParagraph);
+                }
+            },
+            "Shelf": {
+                "Examine": () => {
+                    let newParagraph = {};
+                    newParagraph.innerHTML = `A dusty wooden contraption. Besides some less relevant looking things there's something that catches your eye: Some metal cans.`;
+                    appendToOutput(newParagraph);
+                },
+                "Look at": () => {
+                    environment.Kitchen.interactables.Shelf.Examine();
+                },
+                "Take": () => {
+                    if(!inventory["Good Ingredients"].inInventory){
+                        inventory["Good Ingredients"].Take();
+                    }else{
+                        environment.Kitchen.interactables.Shelf.Lift();
+                    }
+                },
+                "Use": () => {
+                    environment.Kitchen.interactables.Shelf.Take();
+                },
+                "Open": () => {
+                    environment.Kitchen.interactables.Shelf.Take();
+                },
+                "Lift": ()=>{
+                    let newParagraph = {};
+                    newParagraph.innerHTML = `Why would you do that?`;
+                    appendToOutput(newParagraph);
+                }
+            }
         }
     },
     "Bathroom": {
@@ -479,13 +537,65 @@ export let inventory = {
         description: "As you gaze upon this meal, its grotesque assembly assaults your senses. The colors are unnaturally vivid, clashing in a way that seems to wage war against your appetite. The stench hits you like a physical force, a miasma of rot and spoilage that clings to the air, daring you to take a closer look. Its composition, a mishmash of what should have never been combined, promises nothing but regret."
     },
     "Good Ingredients": {
+        name: "Good Ingredients",
         inInventory: false,
         used: false,
-        description: "In your hands, the canned ingredient feels like a promise of safety. Its sealed state assures you of its untouched, preserved quality. The label, though worn, hints at a content that has been spared the ravages of time. It's a small beacon of reliability in your uncertain world, offering a rare moment of culinary reprieve."
+        description: "3 cans of ingredients. According to the label they are are a few months past their prime but you think they will suffice if you intend to cook something.",
+        "Look at": () => {
+            if(inventory["Good Ingredients"].inInventory){
+                let newParagraph = {};
+                newParagraph.innerHTML = inventory["Good Ingredients"].description;
+                appendToOutput(newParagraph);
+            }
+        },
+        "Examine": () => {
+            inventory["Good Ingredients"]["Look at"]();
+        },
+        "Take": () => {
+            if(!inventory["Good Ingredients"].inInventory){
+                let newParagraph = {};
+                newParagraph.innerHTML = `You grab three metal cans from the shelf. They feel quite heavy.`;
+                appendToOutput(newParagraph);
+                newParagraph.innerHTML = `ADDED TO INVENTORY: ${inventory["Good Ingredients"].name}`;
+                appendToOutput(newParagraph);
+                inventory["Good Ingredients"].inInventory = true;
+            }
+        },
+        "Use": () => {
+            if(inventory["Good Ingredients"].inInventory){
+
+            }
+        }
     },
     "Spoiled Ingredients": {
+        name: 'Spoiled Ingredients',
         inInventory: false,
         used: false,
-        description: "As you examine it, the mass from the fridge confronts you with its dismal state. It's an undefinable concoction, its original form lost to time and neglect. The colors have turned into unsettling shades, and the smell is overpowering, a stark reminder of decay. It's a gamble, holding potential danger as much as it does sustenance."
+        description: "As you examine it, the mass from the fridge confronts you with its dismal state. It's an undefinable concoction, its original form lost to time and neglect. The colors have turned into unsettling shades, and the smell is overpowering, a stark reminder of decay. It's a gamble, holding potential danger as much as it does sustenance.",
+        "Look at": () => {
+            if(inventory["Spoiled Ingredients"].inInventory || (environment.Kitchen.interactables.Fridge.isOpen && !inventory["Spoiled Ingredients"].inInventory)){
+                let newParagraph = {};
+                newParagraph.innerHTML = inventory["Spoiled Ingredients"].description;
+                appendToOutput(newParagraph);
+            }
+        },
+        "Examine": () => {
+            inventory["Spoiled Ingredients"]["Look at"]();
+        },
+        "Take": () => {
+            if(!inventory["Spoiled Ingredients"].inInventory){
+                let newParagraph = {};
+                newParagraph.innerHTML = `You grab that thing with your hands.`;
+                appendToOutput(newParagraph);
+                newParagraph.innerHTML = `ADDED TO INVENTORY: ${inventory["Spoiled Ingredients"].name}`;
+                appendToOutput(newParagraph);
+                inventory["Spoiled Ingredients"].inInventory = true;
+            }
+        },
+        "Use": () => {
+            if(inventory["Spoiled Ingredients"].inInventory){
+
+            }
+        }
     }
 };
