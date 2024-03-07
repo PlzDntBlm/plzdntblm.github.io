@@ -102,7 +102,28 @@ export let player = {
     hasDiarrhea: false,
     isHungry: false,
     isTired: false,
-    hasEaten: false
+    hasEaten: false,
+    hungerSeries: 0,
+    hungerAwakening: ["You wake up feeling hollow, your stomach's complaints the first thing you notice. Hunger gnaws at you, a reminder of your body's needs.", "You awake weaker than before, your body's reserves running low. Every movement feels heavier, a testament to your growing hunger.", "As you drift off, a profound weakness overtakes you, the lack of sustenance finally claiming its toll. Darkness envelops you, a final sleep from which there is no awakening."],
+    inStomach: null,
+    "HungerDeath": ()=>{
+        let newParagraph = {};
+        newParagraph.innerHTML = "As the shadow of hunger engulfs you for the third time without reprieve, the vital strength that once propelled you fades into nothingness. In this final sleep, devoid of dreams, you're released from the relentless grip of survival. The journey concludes not with triumph, but with a quiet surrender to the inevitable silence that follows.";
+        appendToOutput(newParagraph);
+        newParagraph.innerHTML = "You died.";
+        appendToOutput(newParagraph);
+        newParagraph.innerHTML = "THE END";
+        appendToOutput(newParagraph);
+    },
+    "StupidDeath": () =>{
+        let newParagraph = {};
+        newParagraph.innerHTML = "In a tragic turn, as you flush away the key, the faint hope of escape drains with it. Alone, with no means to leave and the weight of your choices heavy upon you, despair settles in. Time blurs as the walls of your confinement seem to close in, each day indistinguishable from the next until, finally, stillness takes hold. Your story ends not with a bang, but with the silent, inevitable fade of defeat, a solemn reminder of the fragile thread upon which fate hangs.";
+        appendToOutput(newParagraph);
+        newParagraph.innerHTML = "You died.";
+        appendToOutput(newParagraph);
+        newParagraph.innerHTML = "THE END";
+        appendToOutput(newParagraph);
+    }
 }
 export let environment = {
     "Room": {
@@ -128,11 +149,11 @@ export let environment = {
         interactables: {
             Door: {
                 unlocked: false,
-                open: false,
+                opened: false,
                 "Unlock door": () => {
                     let newParagraph = {};
                     newParagraph.innerHTML = `You stick the key into the doors lock,</br>turn it around...</br></br> CLICK!</br></br>The door is unlocked.</br>You throw the key away.`;
-                    this.unlocked = true;
+                    environment.Room.interactables.Door.unlocked = true;
                     appendToOutput(newParagraph);
                     newParagraph.innerHTML = `REMOVED FROM INVENTORY: Key`;
                     inventory.Key.inInventory = false;
@@ -142,6 +163,10 @@ export let environment = {
                     let newParagraph = {};
                     newParagraph.innerHTML = `The door that kept you from freedom swings open.</br>Sun's bright light strikes your eyes.</br>You leave this reeking place.</br></br>You have won - but at what price?`;
                     appendToOutput(newParagraph);
+                    newParagraph.innerHTML = `You won.`;
+                    appendToOutput(newParagraph);
+                    newParagraph.innerHTML = `THE END`;
+                    appendToOutput(newParagraph);
                 },
                 "Look at": () => {
                     environment.Room.interactables.Door.Examine();
@@ -149,17 +174,17 @@ export let environment = {
                 "Examine": () => {
                     let newParagraph = {};
                     // door closed, door locked, no key
-                    if (environment.Room.interactables.Door.open === false && !environment.Room.interactables.Door.unlocked === false && !inventory.Key.inInventory === false) {
+                    if (environment.Room.interactables.Door.opened === false && !environment.Room.interactables.Door.unlocked === false && !inventory.Key.inInventory === false) {
                         newParagraph.innerHTML = "The door that seems to lead outside doesn't appear to move. It is locked.";
                         appendToOutput(newParagraph);
                     }
                     // door closed, door locked, has key
-                    if (environment.Room.interactables.Door.open === false && !environment.Room.interactables.Door.unlocked === false && !inventory.Key.inInventory === true) {
+                    if (environment.Room.interactables.Door.opened === false && !environment.Room.interactables.Door.unlocked === false && !inventory.Key.inInventory === true) {
                         newParagraph.innerHTML = "The door is locked. But maybe you have something you could use...";
                         appendToOutput(newParagraph);
                     }
                     // door closed, door unlocked, has key
-                    if (environment.Room.interactables.Door.open === false && !environment.Room.interactables.Door.unlocked === true) {
+                    if (environment.Room.interactables.Door.opened === false && !environment.Room.interactables.Door.unlocked === true) {
                         newParagraph.innerHTML = "You stand in front of the unlocked but shut metal door.";
                         appendToOutput(newParagraph);
                     }
@@ -167,17 +192,17 @@ export let environment = {
                 "Use": () => {
                     let newParagraph = {};
                     // door closed, door locked, no key
-                    if (this.open === false && !this.unlocked === false && !inventory.Key.inInventory === false) {
+                    if (environment.Room.interactables.Door.opened === false && !environment.Room.interactables.Door.unlocked === false && !inventory.Key.inInventory === false) {
                         newParagraph.innerHTML = "You pull the handle. The door doesn't move.";
                         appendToOutput(newParagraph);
                     }
                     // door closed, door locked, has key
-                    if (this.open === false && !this.unlocked === false && !inventory.Key.inInventory === true) {
-                        this["Unlock door"]();
+                    if (environment.Room.interactables.Door.opened === false && !environment.Room.interactables.Door.unlocked === false && !inventory.Key.inInventory === true) {
+                        environment.Room.interactables.Door["Unlock door"]();
                     }
                     // door closed, door unlocked, has key
-                    if (this.open === false && !this.unlocked === true) {
-                        this["Exit door"]();
+                    if (environment.Room.interactables.Door.opened === false && !environment.Room.interactables.Door.unlocked === true) {
+                        environment.Room.interactables.Door["Exit door"]();
                     }
                 },
                 "Open": () => {
@@ -246,24 +271,33 @@ export let environment = {
                     appendToOutput(newParagraph);
                 },
                 "Use": () => {
+                    console.log("sleep", player.hungerSeries);
                     let newParagraph = {};
-                    if (player.isTired) {
-                        if (player.hasEaten) {
-                            newParagraph.innerHTML = `The weight of your full stomach pulls you down into an uneasy slumber on the stained mattress, enveloping you in its damp embrace. The filth doesn't bother you as much as the unsettling fullness within.`;
-                            appendToOutput(newParagraph);
-                            player.isTired = false;
-
-                            newParagraph.innerHTML = `A distressing churn in your belly awakens you, a dire need clawing at your insides. It is unmistakable; the urge to relieve yourself is overwhelming, signaling the onset of an unfortunate digestive rebellion.`;
-                            appendToOutput(newParagraph);
-                            player.hasDiarrhea = true;
-                        } else {
-                            newParagraph.innerHTML = `You collapse onto the mattress, your body eventually succumbing to sleep despite the grime. The brief escape from reality is punctuated by a hollow growl from your stomach upon waking, a stark reminder of your neglect.`;
+                    if(!player.hasDiarrhea){
+                        if(player.inStomach){
+                            if(player.inStomach === inventory["Simple Meal"]){
+                                newParagraph.innerHTML = `The weight of your full stomach pulls you down into an uneasy slumber on the stained mattress, enveloping you in its damp embrace. The filth doesn't bother you as much as the unsettling fullness within.`;
+                                appendToOutput(newParagraph);
+                            }else {
+                                newParagraph.innerHTML = "Your rest is fitful. Despite the initial fulfillment, discomfort soon follows, casting a shadow over your slumber. You toss and turn, uneasy with the realization that your choice might have consequences yet to reveal themselves";
+                                appendToOutput(newParagraph);
+                                newParagraph.innerHTML = `A distressing churn in your belly awakens you, a dire need clawing at your insides. It is unmistakable; the urge to relieve yourself is overwhelming, signaling the onset of an unfortunate digestive rebellion.`;
+                                appendToOutput(newParagraph);
+                                player.hasDiarrhea = true;
+                            }
+                            player.inStomach = null;
+                            player.hungerSeries = 0;
+                        }else {
                             player.isHungry = true;
-                            player.isTired = false;
+                            newParagraph.innerHTML = player.hungerAwakening[player.hungerSeries];
                             appendToOutput(newParagraph);
+                            if(player.hungerSeries === 2){
+                                player.HungerDeath();
+                            }
+                            player.hungerSeries++;
                         }
-                    } else {
-                        newParagraph.innerHTML = "The call to rest eludes you, leaving you in a state of wary alertness amidst the room's unyielding discomfort.";
+                    }else{
+                        newParagraph.innerHTML = "As you settle into bed, the urge to relieve yourself becomes undeniable, disrupting any chance of sleep. The discomfort grows, a stark reminder that some needs can't be ignored, no matter how weary you may be. It's clear that rest will remain elusive until you address the pressing call of nature.";
                         appendToOutput(newParagraph);
                     }
                 },
@@ -388,6 +422,7 @@ export let environment = {
                 }
             },
             "Shelf": {
+                looted: false,
                 "Examine": () => {
                     let newParagraph = {};
                     newParagraph.innerHTML = `A dusty wooden contraption. Besides some less relevant looking things there is something that catches your eye: Some metal cans.`;
@@ -397,8 +432,9 @@ export let environment = {
                     environment.Kitchen.interactables.Shelf.Examine();
                 },
                 "Take": () => {
-                    if (!inventory["Good Ingredients"].inInventory) {
+                    if (!inventory["Good Ingredients"].inInventory && !environment.Kitchen.interactables.Shelf.looted) {
                         inventory["Good Ingredients"].Take();
+                        environment.Kitchen.interactables.Shelf.looted = true;
                     } else {
                         let newParagraph = {};
                         newParagraph.innerHTML = `There is nothing interesting left to haul.`;
@@ -503,6 +539,9 @@ export let environment = {
                         newParagraph.innerHTML = `In a moment of desperation, you use the toilet. The ordeal is as quick as it is unpleasant. After the deed is done, a sense of relief washes over you, but as you stand up, you notice a metallic clink among the turmoil below. The key!`;
                         appendToOutput(newParagraph);
                         environment.Bathroom.interactables.Toilet.used = true; // Mark the toilet as used
+                        newParagraph.innerHTML = `ADDED TO INVENTORY: ${inventory.Key.name}`;
+                        appendToOutput();
+                        inventory.Key.inInventory = true;
                     } else if (player.hasDiarrhea && environment.Bathroom.interactables.Toilet.used && !environment.Bathroom.interactables.Toilet.flushed) {
                         // If the player attempts to use it again before flushing
                         newParagraph.innerHTML = "You have already done what needed to be done. There is nothing left for you here, except... wasn't there something you noticed?";
@@ -550,6 +589,7 @@ export let currentRoom =
     };
 export let inventory = {
     "Key": {
+        name: "Key",
         inInventory: false,
         description: "Its metal surface, though tarnished by its unexpected journey, glints with a sense of purpose."
     },
@@ -564,13 +604,63 @@ export let inventory = {
         name: "Simple Meal",
         inInventory: false,
         used: false,
-        description: "It is straightforward in its appearance, with no pretense or complexity, yet there is an underlying assurance of nourishment. The simplicity of its composition, clear and devoid of excess, speaks to a basic yet profound fulfillment. This meal, unassuming in its essence, promises satisfaction in its simplicity, offering a momentary respite from the harshness of your surroundings, with a subtle invitation to partake in its quiet sustenance."
+        description: "It is straightforward in its appearance, with no pretense or complexity, yet there is an underlying assurance of nourishment. The simplicity of its composition, clear and devoid of excess, speaks to a basic yet profound fulfillment. This meal, unassuming in its essence, promises satisfaction in its simplicity, offering a momentary respite from the harshness of your surroundings, with a subtle invitation to partake in its quiet sustenance.",
+        "Examine": ()=>{
+            inventory["Simple Meal"]["Look at"]();
+        },
+        "Look at": ()=>{
+            let newParagraph = {};
+            newParagraph.innerHTML = inventory["Simple Meal"].description;
+            appendToOutput(newParagraph);
+        },
+        "Use": ()=> {
+            if(player.isHungry){
+                let newParagraph = {};
+                newParagraph.innerHTML = 'Upon consuming the meal you\'ve prepared with care, a sense of well-being washes over you. The flavors, though basic, are exactly what you needed, filling you with warmth and satisfaction. The act of eating, simple as it is, momentarily lifts the weight of your circumstances, allowing a brief respite in the quiet. As you finish, a comfortable fullness takes over, and your eyelids grow heavy, suggesting that perhaps it\'s time to rest and digest this unexpected, yet welcome, comfort.';
+                appendToOutput(newParagraph);
+                newParagraph.innerHTML = `REMOVED FROM INVENTORY: ${inventory["Simple Meal"].name}`;
+                appendToOutput(newParagraph);
+                inventory["Simple Meal"].inInventory = false;
+                inventory["Simple Meal"].used = true;
+                player.isHungry = false;
+                player.inStomach = inventory["Simple Meal"];
+            }else{
+                let newParagraph = {};
+                newParagraph.innerHTML = 'You are not hungry yet. Maybe later.';
+                appendToOutput(newParagraph);
+            }
+        }
     },
     "Sacrilegious Meal": {
         name: "Sacrilegious Meal",
         inInventory: false,
         used: false,
-        description: "As you gaze upon this meal, its grotesque assembly assaults your senses. The colors are unnaturally vivid, clashing in a way that seems to wage war against your appetite. The stench hits you like a physical force, a miasma of rot and spoilage that clings to the air, daring you to take a closer look. Its composition, a mishmash of what should have never been combined, promises nothing but regret."
+        description: "As you gaze upon this meal, its grotesque assembly assaults your senses. The colors are unnaturally vivid, clashing in a way that seems to wage war against your appetite. The stench hits you like a physical force, a miasma of rot and spoilage that clings to the air, daring you to take a closer look. Its composition, a mishmash of what should have never been combined, promises nothing but regret.",
+        "Examine": ()=>{
+          inventory["Sacrilegious Meal"]["Look at"]();
+        },
+        "Look at": ()=>{
+            let newParagraph = {};
+            newParagraph.innerHTML = inventory["Sacrilegious Meal"].description;
+            appendToOutput(newParagraph);
+        },
+        "Use": ()=> {
+            if(player.isHungry){
+                let newParagraph = {};
+                newParagraph.innerHTML = 'As you consume the meal concocted from spoiled ingredients, discomfort quickly sets in. The off-putting textures and the overwhelming, unpleasant flavors make every bite a challenge. Despite your hunger, regret fills you with each swallow. Shortly after finishing, a feeling of unease grows within you, hinting at the digestive turmoil that awaits. It\'s a harsh reminder of the risks taken when desperation guides your choices.';
+                appendToOutput(newParagraph);
+                newParagraph.innerHTML = `REMOVED FROM INVENTORY: ${inventory["Sacrilegious Meal"].name}`;
+                appendToOutput(newParagraph);
+                inventory["Sacrilegious Meal"].inInventory = false;
+                inventory["Sacrilegious Meal"].used = true;
+                player.isHungry = false;
+                player.inStomach = inventory["Sacrilegious Meal"];
+            }else{
+                let newParagraph = {};
+                newParagraph.innerHTML = 'You are not hungry yet. Maybe later.';
+                appendToOutput(newParagraph);
+            }
+        }
     },
     "Good Ingredients": {
         name: "Good Ingredients",
@@ -606,6 +696,10 @@ export let inventory = {
                     newParagraph.innerHTML = `ADDED TO INVENTORY: ${inventory["Simple Meal"].name}`;
                     inventory["Simple Meal"].inInventory = true;
                     inventory["Good Ingredients"].inInventory = false;
+                    appendToOutput(newParagraph);
+                }else{
+                    newParagraph.innerHTML = `You probably could use them in the kitchen...`;
+                    appendToOutput(newParagraph);
                 }
             }
         },
@@ -643,8 +737,19 @@ export let inventory = {
             }
         },
         "Use": () => {
+            let newParagraph = {};
             if (inventory["Spoiled Ingredients"].inInventory) {
-
+                if(currentRoom.value.name === environment.Kitchen.name){
+                    newParagraph.innerHTML = `With the spoiled ingredients at your disposal, you hesitantly decide to proceed. Mixing them together, the unsettling sight and overpowering stench from the concoction almost make you second guess your decision. The result is a meal that could barely be called such, a grim testament to desperation. It now resides in your inventory, a stark reminder of the lengths you've gone to survive. This meal, while a grotesque assembly, may be consumed in dire times, but at what cost to your wellbeing?`;
+                    appendToOutput(newParagraph);
+                    newParagraph.innerHTML = `ADDED TO INVENTORY: ${inventory["Sacrilegious Meal"].name}`;
+                    inventory["Sacrilegious Meal"].inInventory = true;
+                    inventory["Spoiled Ingredients"].inInventory = false;
+                    appendToOutput(newParagraph);
+                }else{
+                    newParagraph.innerHTML = `You probably could use them in the kitchen...`;
+                    appendToOutput(newParagraph);
+                }
             }
         }
     }
