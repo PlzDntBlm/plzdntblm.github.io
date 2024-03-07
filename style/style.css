@@ -76,7 +76,7 @@ p.userParagraph:before {
     justify-content: center;
 
     margin-block-start: 3em;
-    margin-block-end: 0em;
+    margin-block-end: 3em;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
     -moz-user-select: none;

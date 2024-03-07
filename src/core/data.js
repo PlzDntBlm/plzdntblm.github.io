@@ -297,6 +297,7 @@ export let environment = {
         "Look around": () => {
             let newParagraph = {};
             newParagraph.innerHTML = "The kitchen consists of a counter, sink, fridge, several cooking utensils, a knife, and a shelf filled with items. The fridge hums quietly, promising ingredients that may or may not be past their prime.";
+            newParagraph.image = "./src/assets/images/Kitchen.png";
             appendToOutput(newParagraph);
         },
         "Examine": () => {
@@ -455,13 +456,14 @@ export let environment = {
         "Look around": () => {
             let newParagraph = {};
             newParagraph.innerHTML = "Within the dirty old bathroom you find the classic toilet, a scratched up ceramic sink and a shelf.";
+            newParagraph.image = './src/assets/images/Bathroom.png';
             appendToOutput(newParagraph);
         },
         "Examine": () => {
             environment.Bathroom["Look around"]();
         },
         "Use": () => {
-            this.Toilet.Use();
+            environment.Bathroom.Enter();
         },
         "Open": () => {
             environment.Bathroom.Enter();
@@ -559,11 +561,13 @@ export let inventory = {
         description: "Its message, cryptic yet imperative, suggests a path forward or a secret to uncover, serving as a silent guide in your solitary journey."
     },
     "Simple Meal": {
+        name: "Simple Meal",
         inInventory: false,
         used: false,
         description: "It is straightforward in its appearance, with no pretense or complexity, yet there is an underlying assurance of nourishment. The simplicity of its composition, clear and devoid of excess, speaks to a basic yet profound fulfillment. This meal, unassuming in its essence, promises satisfaction in its simplicity, offering a momentary respite from the harshness of your surroundings, with a subtle invitation to partake in its quiet sustenance."
     },
     "Sacrilegious Meal": {
+        name: "Sacrilegious Meal",
         inInventory: false,
         used: false,
         description: "As you gaze upon this meal, its grotesque assembly assaults your senses. The colors are unnaturally vivid, clashing in a way that seems to wage war against your appetite. The stench hits you like a physical force, a miasma of rot and spoilage that clings to the air, daring you to take a closer look. Its composition, a mishmash of what should have never been combined, promises nothing but regret."
@@ -594,10 +598,15 @@ export let inventory = {
             }
         },
         "Use": () => {
+            let newParagraph = {};
             if (inventory["Good Ingredients"].inInventory) {
-                let newParagraph = {};
-                newParagraph.innerHTML = `TMP USING`;
-                appendToOutput(newParagraph);
+                if(currentRoom.value.name === environment.Kitchen.name){
+                    newParagraph.innerHTML = `With a mix of hope and necessity driving your actions, you combine them on the stove, stirring occasionally. The aroma that fills the kitchen is comforting, a rare sensation in this desolate place. As the meal comes together, you feel a small sense of accomplishment. It's simple, but it's probably the best meal you've had in a while. You've prepared a Simple Meal, ready to be eaten when you need it most.`;
+                    appendToOutput(newParagraph);
+                    newParagraph.innerHTML = `ADDED TO INVENTORY: ${inventory["Simple Meal"].name}`;
+                    inventory["Simple Meal"].inInventory = true;
+                    inventory["Good Ingredients"].inInventory = false;
+                }
             }
         },
         "Open": () => {
