@@ -75,7 +75,7 @@ p.userParagraph:before {
     display: flex;
     justify-content: center;
 
-    margin-block-start: 1em;
+    margin-block-start: 3em;
     margin-block-end: 0em;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
@@ -89,6 +89,7 @@ p.userParagraph:before {
 .imageParagraphImage {
     max-width: 100%;
     min-width: 100%;
+    image-rendering: pixelated;
 }
 
 @media screen and (min-width: 600px) {

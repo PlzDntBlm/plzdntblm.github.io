@@ -16,8 +16,9 @@ function init() {
 }
 
 function initializeEventListeners() {
-    htmlElements.userInput.addEventListener("keydown", async (event) => {
+    document.addEventListener("keydown", async (event) => {
         htmlElements.userInput.scrollIntoView();
+        htmlElements.userInput.focus();
         // prevent newline
         if (event.keyCode == 13) {
             // prevent default behavior
@@ -50,12 +51,23 @@ export function appendToOutput(obj = {}) {
     obj.class = obj.class || "machineParagraph";
     obj.image = obj.image || null;
 
-    const paragraph = document.createElement('p');
-    paragraph.innerHTML = obj.innerHTML;
-    paragraph.className = obj.class;
-    paragraph.setAttribute("data-program-name", `${obj.attr}>`);
-    htmlElements.outputDiv.appendChild(paragraph);
+    if (obj.image) {
+        const imageParagraph = document.createElement('div');
+        imageParagraph.className = 'imageParagraph';
+        const img = document.createElement('img');
+        img.src = obj.image;
+        img.className = 'imageParagraphImage';
 
+        htmlElements.outputDiv.appendChild(imageParagraph);
+        imageParagraph.appendChild(img);
+    }
+    if (obj.innerHTML) {
+        const paragraph = document.createElement('p');
+        paragraph.innerHTML = obj.innerHTML;
+        paragraph.className = obj.class;
+        paragraph.setAttribute("data-program-name", `${obj.attr}>`);
+        htmlElements.outputDiv.appendChild(paragraph);
+    }
     scrollToBottom();
 }
 
@@ -64,7 +76,8 @@ function clearChat() {
 }
 
 function scrollToBottom() {
-    htmlElements.outputDiv.scrollTop = htmlElements.outputDiv.scrollHeight;
+    //htmlElements.outputDiv.scrollTop = htmlElements.outputDiv.scrollHeight;
+    htmlElements.userInput.scrollIntoView();
 }
 
 function adjustTextareaHeight() {
