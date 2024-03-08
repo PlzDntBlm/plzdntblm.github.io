@@ -110,6 +110,7 @@ p.userParagraph:before {
     width: 100%;
     resize: none;
     overflow: hidden;
+    caret-color: transparent;
 }
 
 /* Style the placeholder text */

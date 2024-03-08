@@ -132,7 +132,9 @@ function normalizeParameter(parameter) {
         "sheet of paper": "note",
         "paper": "note",
         "the mattress on the bed": "bed",
-        "mattress": "bed"
+        "mattress": "bed",
+        "metal cans": "cans",
+        "can": "cans"
     };
 
     let normalizedParameter = parameter.toLowerCase().trim();

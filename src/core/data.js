@@ -204,7 +204,7 @@ export let environment = {
                         environment.Room.interactables.Door["Unlock door"]();
                     }
                     // door closed, door unlocked, has key
-                    if (!environment.Room.interactables.Door.opened && environment.Room.interactables.Door.unlocked && inventory.Key.inInventory) {
+                    else if (!environment.Room.interactables.Door.opened && environment.Room.interactables.Door.unlocked) {
                         environment.Room.interactables.Door["Exit door"]();
                     }
                 },
@@ -347,7 +347,7 @@ export let environment = {
         "Examine": () => {
             environment.Kitchen["Look around"]();
         },
-        "Knife": {
+        /*"Knife": {
             "Examine": () => {
                 let newParagraph = {};
                 newParagraph.innerHTML = "The knife gleams under the kitchen's flickering light. It is sharp, an ominous presence on the counter.";
@@ -360,7 +360,7 @@ export let environment = {
                 appendToOutput(newParagraph);
                 // Implement game-ending logic here
             },
-        },
+        },*/
         "Open": () => {
             environment.Kitchen.Enter();
         },
