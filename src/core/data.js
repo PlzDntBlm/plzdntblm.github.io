@@ -60,6 +60,11 @@ export let commands = {
         needsParameter: true,
         acceptsParameter: true,
         description: "Consume an item."
+    },
+    "Flush":{
+        needsParameter:true,
+        acceptsParameter: true,
+        description: "..."
     }
     /*"Close": {
         needsParameter: true,
@@ -532,14 +537,15 @@ export let environment = {
                     if (!environment.Bathroom.interactables.Toilet.used && !environment.Bathroom.interactables.Toilet.flushed) {
                         newParagraph.innerHTML = !player.hasDiarrhea ? "You really never want to use this dirty throne." : "The pressure is hard. Will you risk it?";
                         appendToOutput(newParagraph);
-                    } else if (environment.Bathroom.interactables.Toilet.used && !environment.Bathroom.interactables.Toilet.flushed) {
+                    } else if (environment.Bathroom.interactables.Toilet.used && !environment.Bathroom.interactables.Toilet.flushed && !inventory.Key.inInventory) {
                         // Add hint about the key
-                        newParagraph.innerHTML = `Peering into the bowl reveals a ghastly sight and amidst the chaos, something glimmers unnaturally. Could it be? The key you have been searching for is lodged within the mess.`;
+                        newParagraph.innerHTML = `Peering into the bowl reveals a ghastly sight and amidst the chaos, something glimmers unnaturally. Could it be? The <ins>key</ins> you have been searching for is lodged within the mess.`;
                         appendToOutput(newParagraph);
                     } else if (environment.Bathroom.interactables.Toilet.used && environment.Bathroom.interactables.Toilet.flushed) {
                         // Player has flushed the key
                         newParagraph.innerHTML = "Even after flushing, the toilet bears the scars of its recent use. Any evidence of the key has been washed away into the plumbing, along with your hopes of escape.";
                         appendToOutput(newParagraph);
+                        player.StupidDeath();
                     }
                 },
                 "Use": () => {
@@ -549,12 +555,12 @@ export let environment = {
                         appendToOutput(newParagraph);
                     } else if (player.hasDiarrhea && !environment.Bathroom.interactables.Toilet.used) {
                         // Player uses the toilet for the first time with diarrhea
-                        newParagraph.innerHTML = `In a moment of desperation, you use the toilet. The ordeal is as quick as it is unpleasant. After the deed is done, a sense of relief washes over you, but as you stand up, you notice a metallic clink among the turmoil below. The <ins>key</ins>!`;
+                        newParagraph.innerHTML = `In a moment of desperation, you use the toilet. The ordeal is as quick as it is unpleasant. After the deed is done, a sense of relief washes over you, but as you stand up, you notice a metallic clink among the turmoil below.`;
                         appendToOutput(newParagraph);
                         environment.Bathroom.interactables.Toilet.used = true; // Mark the toilet as used
-                        newParagraph.innerHTML = `ADDED TO INVENTORY: ${inventory.Key.name}`;
-                        appendToOutput(newParagraph);
-                        inventory.Key.inInventory = true;
+                        //newParagraph.innerHTML = `ADDED TO INVENTORY: ${inventory.Key.name}`;
+                        //appendToOutput(newParagraph);
+                        //inventory.Key.inInventory = true;
                     } else if (player.hasDiarrhea && environment.Bathroom.interactables.Toilet.used && !environment.Bathroom.interactables.Toilet.flushed) {
                         // If the player attempts to use it again before flushing
                         newParagraph.innerHTML = "You have already done what needed to be done. There is nothing left for you here, except... wasn't there something you noticed?";
@@ -573,7 +579,7 @@ export let environment = {
                         appendToOutput(newParagraph);
                     }
                 },
-                "Take Key": () => {
+                /*"Take Key": () => {
                     let newParagraph = {};
                     if (environment.Bathroom.interactables.Toilet.used && !environment.Bathroom.interactables.Toilet.flushed) {
                         // Allow the player to retrieve the key if they haven't flushed yet
@@ -585,6 +591,11 @@ export let environment = {
                         newParagraph.innerHTML = "There is nothing for you to retrieve here.";
                         appendToOutput(newParagraph);
                     }
+                }*/
+            },
+            "Key": {
+                "Take": () => {
+                    inventory.Key.Take();
                 }
             }
         },
@@ -621,6 +632,25 @@ export let inventory = {
         },
         "Look at": () =>{
             inventory.Key.Examine();
+        },
+        "Take":()=>{
+            let toilet = environment.Bathroom.interactables.Toilet;
+            let newParagraph = {};
+            if(!inventory.Key.inInventory){
+                if(currentRoom.value === environment.Bathroom && toilet.used && !toilet.flushed){ // Key in toilet
+                    newParagraph.innerHTML = `Gathering your resolve, you reach into the aftermath of your desperate act, fingers closing around the cold metal of the <ins>key</ins>. With a mix of disgust and determination, you retrieve it from its unsavory hiding place. Clutching the key, a tangible symbol of hope and progress, you can't help but feel a step closer to unlocking your escape, despite the unpleasant means to secure it. This act, though distasteful, reignites a flicker of hope within you.`;
+                    appendToOutput(newParagraph);
+                    newParagraph.innerHTML = `ADDED TO INVENTORY: ${inventory.Key.name}`;
+                    appendToOutput(newParagraph);
+                    inventory.Key.inInventory = true;
+                }else if (currentRoom.value === environment.Bathroom && toilet.used && !toilet.flushed){ // Key flushed
+                    newParagraph.innerHTML = "There is nothing for you to retrieve here.";
+                    appendToOutput(newParagraph);
+                } else{
+                    newParagraph.innerHTML = `You can not find a <i><ke></ke></i>.`;
+                    appendToOutput(newParagraph);
+                }
+            }
         }
     },
     "Note": {
@@ -666,7 +696,7 @@ export let inventory = {
     },
     "Sacrilegious Meal": {
         name: "Sacrilegious Meal",
-        inInventory: true,
+        inInventory: false,
         used: false,
         description: "As you gaze upon this meal, its grotesque assembly assaults your senses. The colors are unnaturally vivid, clashing in a way that seems to wage war against your appetite. The stench hits you like a physical force, a miasma of rot and spoilage that clings to the air, daring you to take a closer look. Its composition, a mishmash of what should have never been combined, promises nothing but regret.",
         "Examine": () => {
@@ -727,7 +757,7 @@ export let inventory = {
             let newParagraph = {};
             if (inventory["Good Ingredients"].inInventory) {
                 if (currentRoom.value.name === environment.Kitchen.name) {
-                    newParagraph.innerHTML = `With a mix of hope and necessity driving your actions, you combine them on the stove, stirring occasionally. The aroma that fills the kitchen is comforting, a rare sensation in this desolate place. As the meal comes together, you feel a small sense of accomplishment. It's simple, but it's probably the best meal you've had in a while. You've prepared a Simple Meal, ready to be eaten when you need it most.`;
+                    newParagraph.innerHTML = `With a mix of hope and necessity driving your actions, you combine them on the stove, stirring occasionally. The aroma that fills the kitchen is comforting, a rare sensation in this desolate place. As the meal comes together, you feel a small sense of accomplishment. It's simple, but it's probably the best meal you've had in a while. You've prepared a <i>simple meal</i>, ready to be eaten when you need it most.`;
                     appendToOutput(newParagraph);
                     newParagraph.innerHTML = `ADDED TO INVENTORY: ${inventory["Simple Meal"].name}`;
                     inventory["Simple Meal"].inInventory = true;
