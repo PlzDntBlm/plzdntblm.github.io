@@ -36,11 +36,11 @@ export let commands = {
         acceptsParameter: true,
         description: "Pick up an item and add it to your inventory."
     },
-    "Drop": {
+    /*"Drop": {
         needsParameter: true,
         acceptsParameter: true,
         description: "Remove an item from your inventory and leave it at your current location."
-    },
+    },*/
     "Use": {
         needsParameter: true,
         acceptsParameter: true,
@@ -56,6 +56,11 @@ export let commands = {
         acceptsParameter: true,
         description: "Use your arms to move an object in the positive direction of the vertical axis of earth."
     },
+    "Eat":{
+        needsParameter: true,
+        acceptsParameter: true,
+        description: "Consume an item."
+    }
     /*"Close": {
         needsParameter: true,
         acceptsParameter: true,
@@ -138,8 +143,11 @@ export let environment = {
             environment.Room["Look around"]();
         },
         "Look around": () => {
+            if(currentRoom.value !== environment.Room){
+                environment.Room.Enter();
+            }
             let newParagraph = {};
-            newParagraph.innerHTML = `Concrete walls. No windows. Three doors:</br>One metal door - probably leading outside.</br>A white wooden door - a sign: Kitchen.</br>Another white door with a silver symbol - a child peeing into a pot. The bathroom?</br></br>In one corner stands the simple wooden bed with the dirty mattress you have slept on.</br>Centered: a wooden table.`;
+            newParagraph.innerHTML = `Concrete walls. No windows. Three doors:</br>One <ins>metal door</ins> - probably leading outside.</br>A white <ins>wooden door</ins> - a sign: <ins>Kitchen</ins>.</br>Another white door with a silver symbol - a child peeing into a pot. The <ins>bathroom</ins>?</br></br>In one corner stands the simple wooden <ins>bed</ins> with the dirty mattress you have slept on.</br>Centered: a wooden <ins>table</ins>.`;
             newParagraph.image = './src/assets/images/Room.png';
             appendToOutput(newParagraph);
         },
@@ -177,17 +185,17 @@ export let environment = {
                 "Examine": () => {
                     let newParagraph = {};
                     // door closed, door locked, no key
-                    if (environment.Room.interactables.Door.opened === false && !environment.Room.interactables.Door.unlocked === false && !inventory.Key.inInventory === false) {
+                    if (!environment.Room.interactables.Door.opened&& !environment.Room.interactables.Door.unlocked&& !inventory.Key.inInventory) {
                         newParagraph.innerHTML = "The door that seems to lead outside doesn't appear to move. It is locked.";
                         appendToOutput(newParagraph);
                     }
                     // door closed, door locked, has key
-                    if (environment.Room.interactables.Door.opened === false && !environment.Room.interactables.Door.unlocked === false && !inventory.Key.inInventory === true) {
+                    else if (!environment.Room.interactables.Door.opened && !environment.Room.interactables.Door.unlocked && inventory.Key.inInventory) {
                         newParagraph.innerHTML = "The door is locked. But maybe you have something you could use...";
                         appendToOutput(newParagraph);
                     }
                     // door closed, door unlocked, has key
-                    if (environment.Room.interactables.Door.opened === false && !environment.Room.interactables.Door.unlocked === true) {
+                    else if (!environment.Room.interactables.Door.opened && environment.Room.interactables.Door.unlocked) {
                         newParagraph.innerHTML = "You stand in front of the unlocked but shut metal door.";
                         appendToOutput(newParagraph);
                     }
@@ -218,7 +226,7 @@ export let environment = {
                 },
                 "Examine": () => {
                     let newParagraph = {};
-                    newParagraph.innerHTML = `There appears to be nothing interesting about this common wooden table.</br>Four legs, a plate.</br>But something catches your eye: There is a single sheet of paper visibly placed on it.`;
+                    newParagraph.innerHTML = `There appears to be nothing interesting about this common wooden table.</br>Four legs, a plate.</br>But something catches your eye: There is a single sheet of <ins>paper</ins> visibly placed on it.`;
                     appendToOutput(newParagraph);
                 },
             },
@@ -339,8 +347,12 @@ export let environment = {
             this["Look around"]();
         },
         "Look around": () => {
+            if(currentRoom.value !== environment.Kitchen){
+                environment.Kitchen.Enter();
+            }
+
             let newParagraph = {};
-            newParagraph.innerHTML = "The kitchen consists of a counter, sink, fridge, several cooking utensils, a knife, and a shelf filled with items. The fridge hums quietly, promising ingredients that may or may not be past their prime.";
+            newParagraph.innerHTML = `The kitchen consists of a counter, sink, <ins>fridge</ins>, several cooking utensils, a knife, and a <ins>shelf</ins> filled with items. The fridge hums quietly, promising ingredients that may or may not be past their prime.`;
             newParagraph.image = "./src/assets/images/Kitchen.png";
             appendToOutput(newParagraph);
         },
@@ -372,29 +384,35 @@ export let environment = {
                 isOpen: false,
                 "Examine": () => {
                     let newParagraph = {};
-                    newParagraph.innerHTML = `Smudges and mold cover the once smooth white surface of the humming device.`;
-                    appendToOutput(newParagraph);
+
+                    if(!environment.Kitchen.interactables.Fridge.isOpen){
+                        newParagraph.innerHTML = `Smudges and mold cover the once smooth white surface of the humming device.`;
+                        appendToOutput(newParagraph);
+                    }else{
+                        environment.Kitchen.interactables.Fridge.Take();
+                    }
                 },
                 "Look at": () => {
                     environment.Kitchen.interactables.Fridge.Examine();
                 },
                 "Take": () => {
-                    if (environment.Kitchen.interactables.Fridge.isOpen && !inventory["Spoiled Ingredients"].inInventory) {
+                    if (environment.Kitchen.interactables.Fridge.isOpen && !inventory["Spoiled Ingredients"].taken) {
                         inventory["Spoiled Ingredients"].Take();
                     } else if (!environment.Kitchen.interactables.Fridge.isOpen) {
                         environment.Kitchen.interactables.Fridge.Open();
                     } else {
-                        environment.Kitchen.interactables.Fridge.Lift();
+                        let newParagraph = {};
+                        newParagraph.innerHTML = `You already took the items from the fridge.`;
+                        appendToOutput(newParagraph);
                     }
                 },
                 "Use": () => {
-                    console.log("ope");
                     environment.Kitchen.interactables.Fridge.Take();
                 },
                 "Open": () => {
                     if (!environment.Kitchen.interactables.Fridge.isOpen) {
                         let newParagraph = {};
-                        newParagraph.innerHTML = `There is a nasty wet sound as the mold between the rims of the door rips apart. A weird stench hits your nostrils. There is something inside.`;
+                        newParagraph.innerHTML = `There is a nasty wet sound as the mold between the rims of the door rips apart. A weird stench hits your nostrils. <ins>There is something inside</ins>.`;
                         appendToOutput(newParagraph);
                         environment.Kitchen.interactables.Fridge.isOpen = true;
                     } else {
@@ -413,7 +431,7 @@ export let environment = {
                 looted: false,
                 "Examine": () => {
                     let newParagraph = {};
-                    newParagraph.innerHTML = `A dusty wooden contraption. Besides some less relevant looking things there is something that catches your eye: Some metal cans.`;
+                    newParagraph.innerHTML = `A dusty wooden contraption. Besides some less relevant looking things there is something that catches your eye: Some metal <ins>cans</ins>.`;
                     appendToOutput(newParagraph);
                 },
                 "Look at": () => {
@@ -482,8 +500,11 @@ export let environment = {
             environment.Bathroom["Look around"]();
         },
         "Look around": () => {
+            if(currentRoom.value !== environment.Bathroom){
+                environment.Bathroom.Enter();
+            }
             let newParagraph = {};
-            newParagraph.innerHTML = "Within the dirty old bathroom you find the classic toilet, a scratched up ceramic sink and a shelf.";
+            newParagraph.innerHTML = `Within the dirty old bathroom you find the classic <ins>toilet</ins>, a scratched up ceramic sink and a shelf.`;
             newParagraph.image = './src/assets/images/Bathroom.png';
             appendToOutput(newParagraph);
         },
@@ -528,11 +549,11 @@ export let environment = {
                         appendToOutput(newParagraph);
                     } else if (player.hasDiarrhea && !environment.Bathroom.interactables.Toilet.used) {
                         // Player uses the toilet for the first time with diarrhea
-                        newParagraph.innerHTML = `In a moment of desperation, you use the toilet. The ordeal is as quick as it is unpleasant. After the deed is done, a sense of relief washes over you, but as you stand up, you notice a metallic clink among the turmoil below. The key!`;
+                        newParagraph.innerHTML = `In a moment of desperation, you use the toilet. The ordeal is as quick as it is unpleasant. After the deed is done, a sense of relief washes over you, but as you stand up, you notice a metallic clink among the turmoil below. The <ins>key</ins>!`;
                         appendToOutput(newParagraph);
                         environment.Bathroom.interactables.Toilet.used = true; // Mark the toilet as used
                         newParagraph.innerHTML = `ADDED TO INVENTORY: ${inventory.Key.name}`;
-                        appendToOutput();
+                        appendToOutput(newParagraph);
                         inventory.Key.inInventory = true;
                     } else if (player.hasDiarrhea && environment.Bathroom.interactables.Toilet.used && !environment.Bathroom.interactables.Toilet.flushed) {
                         // If the player attempts to use it again before flushing
@@ -583,14 +604,31 @@ export let inventory = {
     "Key": {
         name: "Key",
         inInventory: false,
-        description: "Its metal surface, though tarnished by its unexpected journey, glints with a sense of purpose."
+        description: "Its metal surface, though tarnished by its unexpected journey, glints with a sense of purpose.",
+        "Use":()=>{
+            if(inventory.Key.inInventory && currentRoom.value === environment.Room){
+                environment.Room.interactables.Door.Use();
+            }else {
+                let newParagraph = {};
+                newParagraph.innerHTML = `You no fitting keyhole for this key in this room.`;
+                appendToOutput(newParagraph);
+            }
+        },
+        "Examine": ()=>{
+            let newParagraph = {};
+            newParagraph.innerHTML = inventory.Key.description;
+            appendToOutput(newParagraph);
+        },
+        "Look at": () =>{
+            inventory.Key.Examine();
+        }
     },
     "Note": {
         name: "Note",
         inInventory: false,
         text: `Key Inside`,
         location: environment.Room.Table,
-        description: "Its message, cryptic yet imperative, suggests a path forward or a secret to uncover, serving as a silent guide in your solitary journey."
+        description: "Its message, cryptic yet imperative, suggests a path forward or a secret to uncover, serving as a silent guide in your solitary journey.",
     },
     "Simple Meal": {
         name: "Simple Meal",
@@ -621,11 +659,14 @@ export let inventory = {
                 newParagraph.innerHTML = 'You are not hungry yet. Maybe later.';
                 appendToOutput(newParagraph);
             }
+        },
+        "Eat":()=>{
+            inventory["Simple Meal"].Use();
         }
     },
     "Sacrilegious Meal": {
         name: "Sacrilegious Meal",
-        inInventory: false,
+        inInventory: true,
         used: false,
         description: "As you gaze upon this meal, its grotesque assembly assaults your senses. The colors are unnaturally vivid, clashing in a way that seems to wage war against your appetite. The stench hits you like a physical force, a miasma of rot and spoilage that clings to the air, daring you to take a closer look. Its composition, a mishmash of what should have never been combined, promises nothing but regret.",
         "Examine": () => {
@@ -639,7 +680,7 @@ export let inventory = {
         "Use": () => {
             if (player.isHungry) {
                 let newParagraph = {};
-                newParagraph.innerHTML = 'As you consume the meal concocted from spoiled ingredients, discomfort quickly sets in. The off-putting textures and the overwhelming, unpleasant flavors make every bite a challenge. Despite your hunger, regret fills you with each swallow. Shortly after finishing, a feeling of unease grows within you, hinting at the digestive turmoil that awaits. It\'s a harsh reminder of the risks taken when desperation guides your choices.';
+                newParagraph.innerHTML = `As you consume the meal concocted from spoiled ingredients, discomfort quickly sets in. The off-putting textures and the overwhelming, unpleasant flavors make every bite a challenge. Despite your hunger, regret fills you with each swallow. Shortly after finishing, a feeling of unease grows within you, hinting at the digestive turmoil that awaits. It\'s a harsh reminder of the risks taken when desperation guides your choices.</br></br><ins>This may haunt you later...</ins>`;
                 appendToOutput(newParagraph);
                 newParagraph.innerHTML = `REMOVED FROM INVENTORY: ${inventory["Sacrilegious Meal"].name}`;
                 appendToOutput(newParagraph);
@@ -652,6 +693,9 @@ export let inventory = {
                 newParagraph.innerHTML = 'You are not hungry yet. Maybe later.';
                 appendToOutput(newParagraph);
             }
+        },
+        "Eat":()=>{
+            inventory["Sacrilegious Meal"].Use();
         }
     },
     "Good Ingredients": {
@@ -660,7 +704,7 @@ export let inventory = {
         used: false,
         description: "3 cans of ingredients. According to the label they are are a few months past their prime but you think they will suffice if you intend to cook something.",
         "Look at": () => {
-            if (inventory["Good Ingredients"].inInventory) {
+            if (inventory["Good Ingredients"].inInventory || currentRoom.value === environment.Kitchen) {
                 let newParagraph = {};
                 newParagraph.innerHTML = inventory["Good Ingredients"].description;
                 appendToOutput(newParagraph);
@@ -706,6 +750,7 @@ export let inventory = {
     "Spoiled Ingredients": {
         name: 'Spoiled Ingredients',
         inInventory: false,
+        taken: false,
         used: false,
         description: "As you examine it, the mass from the fridge confronts you with its dismal state. It is an undefinable concoction, its original form lost to time and neglect. The colors have turned into unsettling shades, and the smell is overpowering, a stark reminder of decay. It is a gamble, holding potential danger as much as it does sustenance.",
         "Look at": () => {
@@ -719,13 +764,14 @@ export let inventory = {
             inventory["Spoiled Ingredients"]["Look at"]();
         },
         "Take": () => {
-            if (!inventory["Spoiled Ingredients"].inInventory) {
+            if (!inventory["Spoiled Ingredients"].taken) {
                 let newParagraph = {};
                 newParagraph.innerHTML = `You grab that thing with your hands.`;
                 appendToOutput(newParagraph);
                 newParagraph.innerHTML = `ADDED TO INVENTORY: ${inventory["Spoiled Ingredients"].name}`;
                 appendToOutput(newParagraph);
                 inventory["Spoiled Ingredients"].inInventory = true;
+                inventory["Spoiled Ingredients"].taken = true;
             }
         },
         "Use": () => {
