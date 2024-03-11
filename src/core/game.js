@@ -17,7 +17,7 @@ export function handleGameCommand(input) {
     let selectedCommand = null;
     if (input.toUpperCase() === "HELP") { // Check if help CASE 1
         let newParagraph = {}
-        newParagraph.innerHTML = listAllCommands();
+        newParagraph.innerHTML = `</br>` + listAllCommands();
         appendToOutput(newParagraph);
         wasValidCommand = true;
     } else if (input.toUpperCase() === "INVENTORY") { // Check if inventory CASE 2
@@ -74,7 +74,7 @@ export function handleGameCommand(input) {
                                 }
                             } else { // Target not found CASE 6
                                 console.log("Target not found");
-                                appendToOutput({innerHTML: `You can not find a ${parameter}`})
+                                appendToOutput({innerHTML: `You can not find a <i>${parameter}</i>.`})
                             }
                         } else { // Player has forgotten to add parameter CASE 5
                             console.error(`Calling command: ${command}\nMISSING PARAMETER`);
@@ -104,7 +104,7 @@ export function handleGameCommand(input) {
 function listAllCommands() {
     let commandListString = '';
     for (const [command, details] of Object.entries(commands)) {
-        commandListString += `${command} - ${details.description} </br>`;
+        commandListString += `<ins>${command}</ins> - ${details.description} </br>`;
     }
     return commandListString;
 }
