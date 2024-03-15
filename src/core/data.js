@@ -56,13 +56,13 @@ export let commands = {
         acceptsParameter: true,
         description: "Use your arms to move an object in the positive direction of the vertical axis of earth."
     },
-    "Eat":{
+    "Eat": {
         needsParameter: true,
         acceptsParameter: true,
         description: "Consume an item."
     },
-    "Flush":{
-        needsParameter:true,
+    "Flush": {
+        needsParameter: true,
         acceptsParameter: true,
         description: "..."
     }
@@ -148,12 +148,12 @@ export let environment = {
             environment.Room["Look around"]();
         },
         "Look around": () => {
-            if(currentRoom.value !== environment.Room){
+            if (currentRoom.value !== environment.Room) {
                 environment.Room.Enter();
             }
             let newParagraph = {};
             newParagraph.innerHTML = `Concrete walls. No windows. Three doors:</br>One <ins>metal door</ins> - probably leading outside.</br>A white <ins>wooden door</ins> - a sign: <ins>Kitchen</ins>.</br>Another white door with a silver symbol - a child peeing into a pot. The <ins>bathroom</ins>?</br></br>In one corner stands the simple wooden <ins>bed</ins> with the dirty mattress you have slept on.</br>Centered: a wooden <ins>table</ins>.`;
-            newParagraph.image = './src/assets/images/Room.png';
+            newParagraph.image = './src/assets/images/ROOM.png';
             appendToOutput(newParagraph);
         },
         "Examine": () => {
@@ -190,7 +190,7 @@ export let environment = {
                 "Examine": () => {
                     let newParagraph = {};
                     // door closed, door locked, no key
-                    if (!environment.Room.interactables.Door.opened&& !environment.Room.interactables.Door.unlocked&& !inventory.Key.inInventory) {
+                    if (!environment.Room.interactables.Door.opened && !environment.Room.interactables.Door.unlocked && !inventory.Key.inInventory) {
                         newParagraph.innerHTML = "The door that seems to lead outside doesn't appear to move. It is locked.";
                         appendToOutput(newParagraph);
                     }
@@ -352,7 +352,7 @@ export let environment = {
             this["Look around"]();
         },
         "Look around": () => {
-            if(currentRoom.value !== environment.Kitchen){
+            if (currentRoom.value !== environment.Kitchen) {
                 environment.Kitchen.Enter();
             }
 
@@ -390,10 +390,10 @@ export let environment = {
                 "Examine": () => {
                     let newParagraph = {};
 
-                    if(!environment.Kitchen.interactables.Fridge.isOpen){
+                    if (!environment.Kitchen.interactables.Fridge.isOpen) {
                         newParagraph.innerHTML = `Smudges and mold cover the once smooth white surface of the humming device.`;
                         appendToOutput(newParagraph);
-                    }else{
+                    } else {
                         environment.Kitchen.interactables.Fridge.Take();
                     }
                 },
@@ -505,7 +505,7 @@ export let environment = {
             environment.Bathroom["Look around"]();
         },
         "Look around": () => {
-            if(currentRoom.value !== environment.Bathroom){
+            if (currentRoom.value !== environment.Bathroom) {
                 environment.Bathroom.Enter();
             }
             let newParagraph = {};
@@ -616,37 +616,37 @@ export let inventory = {
         name: "Key",
         inInventory: false,
         description: "Its metal surface, though tarnished by its unexpected journey, glints with a sense of purpose.",
-        "Use":()=>{
-            if(inventory.Key.inInventory && currentRoom.value === environment.Room){
+        "Use": () => {
+            if (inventory.Key.inInventory && currentRoom.value === environment.Room) {
                 environment.Room.interactables.Door.Use();
-            }else {
+            } else {
                 let newParagraph = {};
                 newParagraph.innerHTML = `You no fitting keyhole for this key in this room.`;
                 appendToOutput(newParagraph);
             }
         },
-        "Examine": ()=>{
+        "Examine": () => {
             let newParagraph = {};
             newParagraph.innerHTML = inventory.Key.description;
             appendToOutput(newParagraph);
         },
-        "Look at": () =>{
+        "Look at": () => {
             inventory.Key.Examine();
         },
-        "Take":()=>{
+        "Take": () => {
             let toilet = environment.Bathroom.interactables.Toilet;
             let newParagraph = {};
-            if(!inventory.Key.inInventory){
-                if(currentRoom.value === environment.Bathroom && toilet.used && !toilet.flushed){ // Key in toilet
+            if (!inventory.Key.inInventory) {
+                if (currentRoom.value === environment.Bathroom && toilet.used && !toilet.flushed) { // Key in toilet
                     newParagraph.innerHTML = `Gathering your resolve, you reach into the aftermath of your desperate act, fingers closing around the cold metal of the <ins>key</ins>. With a mix of disgust and determination, you retrieve it from its unsavory hiding place. Clutching the key, a tangible symbol of hope and progress, you can't help but feel a step closer to unlocking your escape, despite the unpleasant means to secure it. This act, though distasteful, reignites a flicker of hope within you.`;
                     appendToOutput(newParagraph);
                     newParagraph.innerHTML = `ADDED TO INVENTORY: ${inventory.Key.name}`;
                     appendToOutput(newParagraph);
                     inventory.Key.inInventory = true;
-                }else if (currentRoom.value === environment.Bathroom && toilet.used && !toilet.flushed){ // Key flushed
+                } else if (currentRoom.value === environment.Bathroom && toilet.used && !toilet.flushed) { // Key flushed
                     newParagraph.innerHTML = "There is nothing for you to retrieve here.";
                     appendToOutput(newParagraph);
-                } else{
+                } else {
                     newParagraph.innerHTML = `You can not find a <i><ke></ke></i>.`;
                     appendToOutput(newParagraph);
                 }
@@ -690,7 +690,7 @@ export let inventory = {
                 appendToOutput(newParagraph);
             }
         },
-        "Eat":()=>{
+        "Eat": () => {
             inventory["Simple Meal"].Use();
         }
     },
@@ -724,7 +724,7 @@ export let inventory = {
                 appendToOutput(newParagraph);
             }
         },
-        "Eat":()=>{
+        "Eat": () => {
             inventory["Sacrilegious Meal"].Use();
         }
     },
