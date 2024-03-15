@@ -1,5 +1,6 @@
 import {environment, player, currentRoom, commands, inventory} from "./data.js";
 import {appendToOutput} from "../../main.js";
+import "./audioManager.js";
 
 export function startGame() {
     // Initialize game state, environment, player status, etc.
