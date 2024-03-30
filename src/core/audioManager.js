@@ -48,6 +48,7 @@ let backgroundMusicBuffer;
 loadSound('src/assets/audio/Silent Hill 2 OST - The Day Of Night.mp3').then(buffer => {
     backgroundMusicBuffer = buffer;
     playSound(backgroundMusicBuffer, true); // True to loop
+    removeInitListeners();
 });
 
 // Now your existing functions to play sounds can check if audioContext exists and is running
