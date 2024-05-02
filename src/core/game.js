@@ -8,7 +8,7 @@ export function startGame() {
     player.hasDiarrhea = false;
     currentRoom.set(environment.Room);
     // More initialization code here
-    appendToOutput({innerHTML: "You awake from a deep slumber. What do you do?"});
+    appendToOutput({innerHTML: `You awake from a deep slumber. This is not your home. You do not remember how you got here. </br></br> What do you do?`});
 }
 
 export function handleGameCommand(input) {

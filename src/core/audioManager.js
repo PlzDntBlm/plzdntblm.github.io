@@ -51,7 +51,7 @@ loadSound('src/assets/audio/Silent Hill 2 OST - The Day Of Night.mp3').then(buff
     removeInitListeners();
 });
 
-// Now your existing functions to play sounds can check if audioContext exists and is running
+// existing functions to play sounds  check if audioContext exists and is running
 // Example of playing a sound effect
 function playSoundEffect(soundEffectUrl) {
     if (!audioContext) return; // Make sure audioContext is initialized
