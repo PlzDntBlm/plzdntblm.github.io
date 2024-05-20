@@ -21,6 +21,14 @@
                   autofocus spellcheck="false"></textarea></div>
 </main>
 <aside class="panel rightPanel">
+    <div class="volumeControls">
+        <img src="./src/assets/images/volume_up_24dp.svg" alt="Volume">
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.5">
+        <div id="playPauseControl">
+            <img id="playButton" src="./src/assets/images/play_arrow_24dp.svg" alt="Volume">
+            <img id="pauseButton" src="./src/assets/images/pause_24dp.svg" class="hidden" alt="Volume">
+        </div>
+    </div>
 </aside>
 </body>
 <script type="module" src="./main.js"></script>
