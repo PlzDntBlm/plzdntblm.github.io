@@ -366,7 +366,7 @@ export let environment = {
             }
 
             let newParagraph = {};
-            newParagraph.innerHTML = `The kitchen consists of a counter, sink, <ins>fridge</ins>, several cooking utensils, a <ins>knife</ins>, and a <ins>shelf</ins> filled with items. The fridge hums quietly, promising ingredients that may or may not be past their prime.`;
+            newParagraph.innerHTML = `The kitchen consists of a counter, sink, <ins>fridge</ins>, several cooking utensils, a <ins>knife</ins>, and a <ins>shelf</ins> filled with items. The fridge hums quietly, promising ingredients that may or may not be past their prime. <br><br>Maybe, just maybe you could cook something here.`;
             newParagraph.image = "./src/assets/images/Kitchen.png";
             appendToOutput(newParagraph);
         },
