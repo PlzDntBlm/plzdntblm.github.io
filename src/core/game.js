@@ -2,16 +2,64 @@ import {environment, player, currentRoom, commands, inventory} from "./data.js";
 import {appendToOutput} from "../../main.js";
 import "./audioManager.js";
 
+let lastInteractionTime = Date.now();
+let reminderInterval = null;
+let unproductiveInputCount = 0;
+const IDLE_THRESHOLD = 300000; // 5 minutes in milliseconds
+const UNPRODUCTIVE_INPUT_LIMIT = 6;
+
+function sendReminder() {
+    const currentTime = Date.now();
+    const idleTime = currentTime - lastInteractionTime;
+
+    if (idleTime >= IDLE_THRESHOLD) {
+        let newParagraph = {};
+        if (player.isHungry) {
+            if (player.hungerSeries === 1) {
+                newParagraph.innerHTML = "The gnawing hunger inside you makes it hard to focus on anything else. You need to find a way out of here and get some food.";
+            } else if (player.hungerSeries === 2) {
+                newParagraph.innerHTML = "Your hunger is becoming unbearable. Every passing minute feels like an eternity. Escape is your only hope.";
+            }
+        } else {
+            newParagraph.innerHTML = "You must find a way to escape this place. Every moment you linger here could be your last.";
+        }
+        appendToOutput(newParagraph);
+
+        // Reset counters and idle time after sending a reminder
+        lastInteractionTime = Date.now();
+        unproductiveInputCount = 0;
+        clearInterval(reminderInterval);
+    }
+}
+
+function forceHint() {
+    let newParagraph = {};
+    newParagraph.innerHTML = "Hint: Remember, you need to find a way to escape. Have you tried examining your surroundings more closely?";
+    appendToOutput(newParagraph);
+
+    // Reset counters and idle time after forcing a hint
+    lastInteractionTime = Date.now();
+    unproductiveInputCount = 0;
+    clearInterval(reminderInterval);
+}
+
+function startReminderInterval() {
+    if (reminderInterval) clearInterval(reminderInterval);
+    reminderInterval = setInterval(sendReminder, 60000); // Check every 60 seconds
+}
+
 export function startGame() {
     // Initialize game state, environment, player status, etc.
-    // Example:
     player.hasDiarrhea = false;
     currentRoom.set(environment.Room);
     // More initialization code here
     appendToOutput({innerHTML: `You awake from a deep slumber. This is not your home. You do not remember how you got here. </br></br> What do you do?`});
-    let newParagraph = {}
+    let newParagraph = {};
     newParagraph.innerHTML = `Available Commands (append the object you want to interact with)</br>` + listAllCommands();
     appendToOutput(newParagraph);
+
+    // Start the reminder interval
+    startReminderInterval();
 }
 
 export function handleGameCommand(input) {
@@ -20,7 +68,7 @@ export function handleGameCommand(input) {
     let wasValidCommand = false;
     let selectedCommand = null;
     if (input.toUpperCase() === "HELP") { // Check if help CASE 1
-        let newParagraph = {}
+        let newParagraph = {};
         newParagraph.innerHTML = `Available Commands (append the object you want to interact with)</br>` + listAllCommands();
         appendToOutput(newParagraph);
         wasValidCommand = true;
@@ -51,7 +99,6 @@ export function handleGameCommand(input) {
                             }
                             if (currentRoom.value.interactables) { // Parameter is an interactable
                                 for (let interactablesKey in currentRoom.value.interactables) {
-                                    console.log(interactablesKey)
                                     if (normalizeParameter(parameter).toUpperCase() === interactablesKey.toUpperCase()) {
                                         target = currentRoom.value.interactables[interactablesKey];
                                     }
@@ -66,43 +113,52 @@ export function handleGameCommand(input) {
                             }
 
                             if (target) { // Target is a room
-                                console.log("Found target: ", target);
-
-                                console.log(`Calling command: ${command} with parameter\nParameter: ${parameter}`);
                                 selectedCommand = command; // Set selected command
 
                                 if (target[command] instanceof Function) {
                                     target[command]();
+                                    wasValidCommand = true;
                                 } else { // You can't do that CASE 6.5
                                     appendToOutput({innerHTML: `At least you can not do that.`});
+                                    unproductiveInputCount++;
                                 }
                             } else { // Target not found CASE 6
-                                console.log("Target not found");
-                                appendToOutput({innerHTML: `You can not find a <i>${parameter}</i>.`})
+                                appendToOutput({innerHTML: `You can not find a <i>${parameter}</i>.`});
+                                unproductiveInputCount++;
                             }
                         } else { // Player has forgotten to add parameter CASE 5
-                            console.error(`Calling command: ${command}\nMISSING PARAMETER`);
                             appendToOutput({innerHTML: `You need to add a parameter to your command.`});
+                            unproductiveInputCount++;
                         }
                     } else {
-                        console.log(`Calling command: ${command}`);
                         selectedCommand = command; // Set selected command
-
                         currentRoom.value[command]();
+                        wasValidCommand = true;
                     }
                 } else { // Calling command without input parameter CASE 4
-                    console.log(`Calling command: ${command} with no parameters`);
                     selectedCommand = command; // Set selected command
                     currentRoom.value[command]();
+                    wasValidCommand = true;
                 }
-                wasValidCommand = true;
                 break; // Exit the loop after finding the first matching command
             }
         }
     }
     if (!wasValidCommand) { // Not a valid command CASE 3
         appendToOutput({innerHTML: `This was not a valid command... maybe check 'help'?`});
+        unproductiveInputCount++;
     }
+
+    // Force a hint if unproductive input limit is reached
+    if (unproductiveInputCount >= UNPRODUCTIVE_INPUT_LIMIT) {
+        forceHint();
+    }
+
+    // Update the last interaction time
+    lastInteractionTime = Date.now();
+
+    // Restart the reminder interval
+    startReminderInterval();
 }
 
 function listAllCommands() {

@@ -296,7 +296,6 @@ export let environment = {
                     appendToOutput(newParagraph);
                 },
                 "Use": () => {
-                    console.log("sleep", player.hungerSeries);
                     let newParagraph = {};
                     if (!player.hasDiarrhea) {
                         if (player.inStomach) {
@@ -584,6 +583,9 @@ export let environment = {
                         appendToOutput(newParagraph);
                     }
                 },
+                "Open": () => {
+                    environment.Bathroom.interactables.Toilet.Examine();
+                }
                 /*"Take Key": () => {
                     let newParagraph = {};
                     if (environment.Bathroom.interactables.Toilet.used && !environment.Bathroom.interactables.Toilet.flushed) {

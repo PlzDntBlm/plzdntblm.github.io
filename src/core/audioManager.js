@@ -69,7 +69,6 @@ loadSound('src/assets/audio/Silent Hill 2 OST - The Day Of Night.mp3').then(buff
     backgroundMusicBuffer = buffer;
     backgroundMusicSource = playSound(backgroundMusicBuffer, true); // True to loop, assign to backgroundMusicSource
     startTime = audioContext.currentTime; // Set the start time
-    console.warn("Background music loaded and playing");
     removeInitListeners();
     playButton.classList.add('hidden');
     pauseButton.classList.remove('hidden');
@@ -87,7 +86,6 @@ function playSoundEffect(soundEffectUrl) {
 
 // Don't forget to remove the event listeners when they're no longer needed
 function removeInitListeners() {
-    console.warn("Removing event listeners");
     document.removeEventListener('click', initAudioContext);
     document.removeEventListener('keydown', initAudioContext);
 }
