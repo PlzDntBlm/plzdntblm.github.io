@@ -133,6 +133,15 @@ export let player = {
         appendToOutput(newParagraph);
         newParagraph.innerHTML = "THE END";
         appendToOutput(newParagraph);
+    },
+    "SuicideDeath": () => {
+        let newParagraph = {};
+        newParagraph.innerHTML = "In a moment of despair, you use the knife on yourself. The pain is fleeting, but the darkness that follows is eternal. Your journey ends here, a tragic conclusion to your struggle.";
+        appendToOutput(newParagraph);
+        newParagraph.innerHTML = "You died.";
+        appendToOutput(newParagraph);
+        newParagraph.innerHTML = "THE END";
+        appendToOutput(newParagraph);
     }
 }
 export let environment = {
@@ -364,20 +373,6 @@ export let environment = {
         "Examine": () => {
             environment.Kitchen["Look around"]();
         },
-        /*"Knife": {
-            "Examine": () => {
-                let newParagraph = {};
-                newParagraph.innerHTML = "The knife gleams under the kitchen's flickering light. It is sharp, an ominous presence on the counter.";
-                appendToOutput(newParagraph);
-            },
-            "Use": () => {
-                let newParagraph = {};
-                // Warning: The following content is sensitive and may not be suitable for all audiences.
-                newParagraph.innerHTML = "With a sense of despair, you pick up the knife. What happens next is a tragic culmination of events, marking a dark end to your journey.";
-                appendToOutput(newParagraph);
-                // Implement game-ending logic here
-            },
-        },*/
         "Open": () => {
             environment.Kitchen.Enter();
         },
@@ -482,6 +477,16 @@ export let environment = {
                 },
                 "Lift": () => {
                     environment.Kitchen.interactables.Shelf.Take();
+                }
+            },
+            "Knife": {
+                "Examine": () => {
+                    let newParagraph = {};
+                    newParagraph.innerHTML = "The knife gleams under the kitchen's flickering light. It is sharp, an ominous presence on the counter.";
+                    appendToOutput(newParagraph);
+                },
+                "Take": () => {
+                    inventory.Knife.Take();
                 }
             }
         }
@@ -818,6 +823,42 @@ export let inventory = {
                     newParagraph.innerHTML = `You probably could use them in the kitchen...`;
                     appendToOutput(newParagraph);
                 }
+            }
+        }
+    },
+    "Knife": {
+        name: "Knife",
+        inInventory: false,
+        description: "A sharp kitchen knife, glinting ominously.",
+        "Examine": () => {
+            let newParagraph = {};
+            newParagraph.innerHTML = inventory.Knife.description;
+            appendToOutput(newParagraph);
+        },
+        "Look at": () => {
+            inventory.Knife.Examine();
+        },
+        "Take": () => {
+            if (!inventory.Knife.inInventory) {
+                let newParagraph = {};
+                newParagraph.innerHTML = "You pick up the knife and add it to your inventory.";
+                appendToOutput(newParagraph);
+                newParagraph.innerHTML = "ADDED TO INVENTORY: Knife";
+                appendToOutput(newParagraph);
+                inventory.Knife.inInventory = true;
+            } else {
+                let newParagraph = {};
+                newParagraph.innerHTML = "You already have the knife in your inventory.";
+                appendToOutput(newParagraph);
+            }
+        },
+        "Use": () => {
+            if (inventory.Knife.inInventory) {
+                player.SuicideDeath();
+            } else {
+                let newParagraph = {};
+                newParagraph.innerHTML = "You don't have the knife in your inventory.";
+                appendToOutput(newParagraph);
             }
         }
     }
