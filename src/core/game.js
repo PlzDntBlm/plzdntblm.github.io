@@ -9,6 +9,9 @@ export function startGame() {
     currentRoom.set(environment.Room);
     // More initialization code here
     appendToOutput({innerHTML: `You awake from a deep slumber. This is not your home. You do not remember how you got here. </br></br> What do you do?`});
+    let newParagraph = {}
+    newParagraph.innerHTML = `Available Commands (append the object you want to interact with)</br>` + listAllCommands();
+    appendToOutput(newParagraph);
 }
 
 export function handleGameCommand(input) {
@@ -18,7 +21,7 @@ export function handleGameCommand(input) {
     let selectedCommand = null;
     if (input.toUpperCase() === "HELP") { // Check if help CASE 1
         let newParagraph = {}
-        newParagraph.innerHTML = `</br>` + listAllCommands();
+        newParagraph.innerHTML = `Available Commands (append the object you want to interact with)</br>` + listAllCommands();
         appendToOutput(newParagraph);
         wasValidCommand = true;
     } else if (input.toUpperCase() === "INVENTORY") { // Check if inventory CASE 2
