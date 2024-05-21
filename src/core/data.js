@@ -1,6 +1,48 @@
 import {appendToOutput} from "../../main.js";
+import {startGame, startNewGame} from "./game.js";
 
 export let commands = {
+    "Load": {
+        needsParameter: false,
+        acceptsParameter: false,
+        description: "Load the game from the save.",
+        action: () => {
+            location.reload(); // Reload the page to restart the game
+        }
+    },
+    "Save": {
+        needsParameter: false,
+        acceptsParameter: false,
+        description: "Save your current game progress.",
+        action: () => {
+            let saveData = {
+                currentRoom: currentRoom.value.name,
+                inventory: Object.keys(inventory).reduce((acc, key) => {
+                    acc[key] = inventory[key].inInventory;
+                    return acc;
+                }, {}),
+                player: {
+                    hasDiarrhea: player.hasDiarrhea,
+                    isHungry: player.isHungry,
+                    isTired: player.isTired,
+                    hasEaten: player.hasEaten,
+                    hungerSeries: player.hungerSeries
+                }
+            };
+            localStorage.setItem("saveData", JSON.stringify(saveData));
+            let newParagraph = {};
+            newParagraph.innerHTML = "Game saved.";
+            appendToOutput(newParagraph);
+        }
+    },
+    "Restart": {
+        needsParameter: false,
+        acceptsParameter: false,
+        description: "Restart the game from the beginning.",
+        action: () => {
+            startNewGame(); // Call the function to reset the game state
+        }
+    },
     "Enter": {
         needsParameter: true,
         acceptsParameter: true,
@@ -86,27 +128,26 @@ export let commands = {
         acceptsParameter: true,
         description: "Hand over an item from your inventory to a character or use it on an object."
     },
-    "Save": {
-        needsParameter: false,
-        acceptsParameter: true,
-        description: "Save your current game progress."
-    },
-    "Load": {
-        needsParameter: false,
-        acceptsParameter: true,
-        description: "Load a previously saved game."
-    },
-    "Restart": {
-        needsParameter: false,
-        acceptsParameter: false,
-        description: "Restart the game from the beginning."
-    },
     "Quit": {
         needsParameter: false,
         acceptsParameter: false,
         description: "Quit the game."
     }*/
 };
+
+export function loadGame() {
+    let saveData = JSON.parse(localStorage.getItem("saveData"));
+    if (saveData) {
+        currentRoom.set(environment[saveData.currentRoom]);
+        Object.keys(saveData.inventory).forEach(key => {
+            inventory[key].inInventory = saveData.inventory[key];
+        });
+        Object.assign(player, saveData.player);
+        appendToOutput({innerHTML: `Game loaded.`});
+    } else {
+        startGame();
+    }
+}
 
 export let player = {
     hasDiarrhea: false,

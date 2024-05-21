@@ -1,4 +1,5 @@
-import {handleGameCommand, startGame} from "./src/core/game.js";
+import {handleGameCommand} from "./src/core/game.js";
+import {loadGame} from "./src/core/data.js";
 
 export let htmlElements = {};
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function init() {
     initializeEventListeners();
-    startGame();
+    loadGame()
 }
 
 function initializeEventListeners() {

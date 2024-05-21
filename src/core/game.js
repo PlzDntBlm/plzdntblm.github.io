@@ -48,6 +48,35 @@ function startReminderInterval() {
     reminderInterval = setInterval(sendReminder, 60000); // Check every 60 seconds
 }
 
+export function startNewGame() {
+    // Reset player state
+    player.hasDiarrhea = false;
+    player.isHungry = false;
+    player.isTired = false;
+    player.hasEaten = false;
+    player.hungerSeries = 0;
+
+    // Reset inventory
+    for (let item in inventory) {
+        inventory[item].inInventory = false;
+    }
+
+    // Set initial environment
+    currentRoom.set(environment.Room);
+
+    // Clear local storage if any
+    localStorage.removeItem("saveData");
+
+    // Output the initial game state
+    appendToOutput({innerHTML: `You awake from a deep slumber. This is not your home. You do not remember how you got here. </br></br> What do you do?`});
+    let newParagraph = {};
+    newParagraph.innerHTML = `Available Commands (append the object you want to interact with)</br>` + listAllCommands();
+    appendToOutput(newParagraph);
+
+    // Start the reminder interval
+    startReminderInterval();
+}
+
 export function startGame() {
     // Initialize game state, environment, player status, etc.
     player.hasDiarrhea = false;
@@ -74,6 +103,15 @@ export function handleGameCommand(input) {
         wasValidCommand = true;
     } else if (input.toUpperCase() === "INVENTORY") { // Check if inventory CASE 2
         appendToOutput({innerHTML: listInventoy()});
+        wasValidCommand = true;
+    } else if (input.toUpperCase() === "LOAD") { // Check if inventory CASE 2
+        commands.Load.action();
+        wasValidCommand = true;
+    } else if (input.toUpperCase() === "SAVE") { // Check if inventory CASE 2
+        commands.Save.action();
+        wasValidCommand = true;
+    } else if (input.toUpperCase() === "RESTART") { // Check if inventory CASE 2
+        commands.Restart.action();
         wasValidCommand = true;
     } else { // Check if valid command
         for (let command in commands) {
